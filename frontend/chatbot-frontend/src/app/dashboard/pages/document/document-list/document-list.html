@@ -1,0 +1,146 @@
+<div class="p-8 bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-gray-800/50 transition-colors">
+  <!-- Header Section -->
+  <div class="flex flex-col space-y-2 mb-6">
+    <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
+      {{ 'HISTORY.SELECT_CHATBOT' | translate }}
+    </h2>
+    <p class="text-sm text-gray-500 dark:text-gray-400">
+      {{ 'HISTORY.SELECT_CHATBOT_DESC' | translate }}
+    </p>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMsg" class="mb-6 p-4 bg-red-50 dark:bg-red-900/20 rounded-lg text-red-600 dark:text-red-300 border-l-4 border-red-500">
+    {{ errorMsg }}
+  </div>
+
+  <!-- Chatbot Selection -->
+  <div class="mb-8">
+    <div class="flex items-center justify-between mb-2">
+      <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+        {{ 'CHATBOT.SELECT_LABEL' | translate }}
+      </label>
+      <!-- Selected Chatbot ID - Only shows when a chatbot is selected -->
+      <div *ngIf="selectedChatbotId" class="flex items-center gap-1 text-xs">
+        <span class="text-gray-500 dark:text-gray-400">{{ 'CHATBOT.ID' | translate }}:</span>
+        <span class="font-mono px-2 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-lg text-sm">
+          {{ shortenId(selectedChatbotId) }}
+        </span>
+      </div>
+    </div>
+
+    <select 
+      (change)="onChatbotChange($event)" 
+      [value]="selectedChatbotId"
+      class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+    >
+      <option *ngFor="let chatbot of chatbots" [value]="chatbot.id">
+        {{ chatbot.name || chatbot.id }}
+      </option>
+    </select>
+  </div>
+
+  <!-- Date Filter -->
+  <div class="mb-6 flex items-center space-x-4">
+    <label for="filterDate" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+      {{ 'DOCUMENT.FILTER_BY_DATE' | translate }}
+    </label>
+    <input
+      id="filterDate"
+      type="date"
+      [(ngModel)]="filterDate"
+      (change)="applyDateFilter()"
+      class="px-3 py-2 border rounded-md border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+    />
+    <button
+      (click)="clearDateFilter()"
+      class="px-3 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors text-sm"
+    >
+      {{ 'DOCUMENT.CLEAR_FILTER' | translate }}
+    </button>
+  </div>
+
+  <!-- Documents Section -->
+  <div *ngIf="selectedChatbotId" class="space-y-6">
+    <div class="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 pb-4">
+      <div class="flex items-center space-x-3">
+        <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">
+          {{ 'DOCUMENT.LIST_TITLE' | translate }}
+        </h3>
+      </div>
+      <a [routerLink]="['/dashboard/documents/upload']"
+         [queryParams]="{ chatbot_id: selectedChatbotId }"
+         class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white text-sm font-medium rounded-lg shadow-sm transition-all hover:shadow-md">
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+        </svg>
+        {{ 'DOCUMENT.UPLOAD_BUTTON' | translate }}
+      </a>
+    </div>
+
+    <!-- Documents List -->
+    <div *ngIf="documents.length > 0; else noDocs" class="grid gap-3">
+      <div *ngFor="let doc of filteredDocuments" 
+           class="group flex items-center p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all hover:shadow-xs">
+        <div class="flex-shrink-0 p-3 mr-4 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+          <svg class="w-5 h-5 text-blue-500 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+          </svg>
+        </div>
+        <div class="min-w-0 flex-1">
+          <p class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
+            {{ doc.filename }}
+          </p>
+          <p class="text-xs text-gray-500 dark:text-gray-400 truncate">
+            {{ getSafeDocumentSize(doc) | fileSize }} • {{ doc.uploadDate | date:'medium' }}
+          </p>
+        </div>
+        <button
+          *ngIf="doc.id"
+          (click)="openDeleteModal(doc.id)"
+          class="text-red-400 hover:text-red-600 ml-auto transition-colors"
+          [attr.aria-label]="'DOCUMENT.DELETE_BUTTON' | translate"
+          [disabled]="deleteInProgress">
+          <lucide-icon name="trash-2" class="w-5 h-5" />
+        </button>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <ng-template #noDocs>
+      <div class="text-center py-12">
+        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+          {{ 'DOCUMENT.NO_DOCUMENTS_TITLE' | translate }}
+        </h3>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          {{ 'DOCUMENT.NO_DOCUMENTS_DESC' | translate }}
+        </p>
+        <div class="mt-6">
+          <a [routerLink]="['/dashboard/documents/upload']"
+             [queryParams]="{ chatbot_id: selectedChatbotId }"
+             class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md shadow-sm transition-colors">
+            <svg class="-ml-0.5 mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            {{ 'DOCUMENT.UPLOAD_BUTTON' | translate }}
+          </a>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>
+
+<!-- Modal de suppression -->
+<app-delete-modal
+  [isOpen]="showDeleteModal"
+  [title]="'DOCUMENT.DELETE_CONFIRM_TITLE'"
+  [message]="'DOCUMENT.DELETE_CONFIRM_MESSAGE'"
+  (confirm)="confirmDelete()"
+  (cancel)="cancelDelete()">
+</app-delete-modal>

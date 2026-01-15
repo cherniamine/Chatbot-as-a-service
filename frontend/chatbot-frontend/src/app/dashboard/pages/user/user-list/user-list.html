@@ -1,0 +1,242 @@
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <!-- Header Section -->
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+    <div class="flex items-center gap-3">
+      <div class="p-3 rounded-lg bg-purple-100 dark:bg-purple-900/50">
+        <lucide-icon name="users" class="w-6 h-6 text-purple-600 dark:text-purple-400"></lucide-icon>
+      </div>
+      <h1 class="text-2xl font-bold text-gray-800 dark:text-white">
+        {{ 'USER.TITLE' | translate }}
+      </h1>
+    </div>
+    
+    <button (click)="openAddModal()"
+      class="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg hover:opacity-90 transition-all shadow-md hover:shadow-lg">
+      <lucide-icon name="user-plus" class="w-5 h-5"></lucide-icon>
+      <span class="font-medium">{{ 'USER.ADD' | translate }}</span>
+    </button>
+  </div>
+
+  <!-- Status Indicators -->
+  <div class="mb-6">
+    <!-- Loading -->
+    <div *ngIf="loading" class="flex items-center gap-3 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+      <div class="animate-spin">
+        <lucide-icon name="loader-2" class="w-5 h-5 text-blue-600 dark:text-blue-400"></lucide-icon>
+      </div>
+      <span class="text-blue-800 dark:text-blue-200 font-medium">
+        {{ 'USER.LOADING' | translate }}
+      </span>
+    </div>
+
+    <!-- Error -->
+    <div *ngIf="error" class="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg flex items-start gap-3">
+      <lucide-icon name="alert-circle" class="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5"></lucide-icon>
+      <div>
+        <h3 class="font-medium text-red-800 dark:text-red-200">{{ 'COMMON.ERROR' | translate }}</h3>
+        <p class="text-red-700 dark:text-red-300 text-sm">{{ error }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- User Table -->
+  <div *ngIf="!loading && !error" class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div *ngIf="users.length > 0; else emptyState">
+      <div class="overflow-x-auto">
+        <table class="w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead class="bg-gray-50 dark:bg-gray-700/50">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                {{ 'USER.NAME' | translate }}
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                {{ 'USER.EMAIL' | translate }}
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                {{ 'USER.ROLE' | translate }}
+              </th>
+              <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                {{ 'USER.ACTIONS' | translate }}
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            <tr *ngFor="let user of users" class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center gap-3">
+                  <div class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center">
+                    <span class="text-indigo-600 dark:text-indigo-400 font-medium">
+                      {{ user.name | slice:0:1 | uppercase }}
+                    </span>
+                  </div>
+                  <div class="font-medium text-gray-900 dark:text-white">
+                    {{ user.name }}
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-gray-600 dark:text-gray-300">
+                {{ user.email }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span [ngClass]="{
+                  'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400': user.role === 'admin',
+                  'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400': user.role === 'user'
+                }" class="px-2.5 py-1 rounded-full text-xs font-medium capitalize">
+                  {{ user.role }}
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <div class="flex justify-end gap-3">
+                  <button (click)="openEditModal(user)" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300 transition-colors">
+                    <lucide-icon name="pencil" class="w-4 h-4"></lucide-icon>
+                    <span class="sr-only">{{ 'USER.EDIT' | translate }}</span>
+                  </button>
+                  <button (click)="confirmDelete(user)" class="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300 transition-colors">
+                    <lucide-icon name="trash-2" class="w-4 h-4"></lucide-icon>
+                    <span class="sr-only">{{ 'USER.DELETE' | translate }}</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <ng-template #emptyState>
+      <div class="p-8 text-center">
+        <div class="mx-auto max-w-md">
+          <lucide-icon name="users" class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500"></lucide-icon>
+          <h3 class="mt-2 text-lg font-medium text-gray-900 dark:text-white">
+            {{ 'USER.NO_USERS' | translate }}
+          </h3>
+          <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            {{ 'USER.EMPTY_STATE_DESCRIPTION' | translate }}
+          </p>
+          <div class="mt-6">
+            <button (click)="openAddModal()" type="button"
+              class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              <lucide-icon name="plus" class="-ml-1 mr-2 h-5 w-5"></lucide-icon>
+              {{ 'USER.ADD' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- Add/Edit Modal -->
+  <div *ngIf="showModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" (click)="closeModal()"></div>
+      
+      <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+        <div class="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <div class="sm:flex sm:items-start">
+            <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 dark:bg-indigo-900/30 sm:mx-0 sm:h-10 sm:w-10">
+              <lucide-icon [name]="selectedUser ? 'edit-3' : 'user-plus'" class="h-6 w-6 text-indigo-600 dark:text-indigo-400"></lucide-icon>
+            </div>
+            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+              <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white" id="modal-title">
+                {{ selectedUser ? ('USER.EDIT_USER' | translate) : ('USER.ADD_USER' | translate) }}
+              </h3>
+              <div class="mt-4">
+                <form (ngSubmit)="submitForm()" class="space-y-4">
+                  <div>
+                    <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      {{ 'USER.FORM.NAME' | translate }}
+                    </label>
+                    <input [(ngModel)]="form.name" id="name" name="name" required
+                      class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white">
+                  </div>
+
+                  <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      {{ 'USER.FORM.EMAIL' | translate }}
+                    </label>
+                    <input [(ngModel)]="form.email" id="email" name="email" type="email" required
+                      class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white">
+                  </div>
+
+                  <div *ngIf="!selectedUser">
+                    <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      {{ 'USER.FORM.PASSWORD' | translate }}
+                    </label>
+                    <input [(ngModel)]="form.password" id="password" name="password" type="password" required
+                      class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white">
+                  </div>
+
+                  <div>
+                    <label for="role" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      {{ 'USER.FORM.ROLE' | translate }}
+                    </label>
+                    <select [(ngModel)]="form.role" id="role" name="role"
+                      class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white">
+                      <option value="user">{{ 'USER.FORM.ROLES.USER' | translate }}</option>
+                      <option value="admin">{{ 'USER.FORM.ROLES.ADMIN' | translate }}</option>
+                    </select>
+                  </div>
+
+                  <div class="pt-2 flex justify-end gap-3">
+                    <button type="button" (click)="closeModal()"
+                      class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                      {{ 'USER.CANCEL' | translate }}
+                    </button>
+                    <button type="submit"
+                      class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                      {{ selectedUser ? ('USER.UPDATE' | translate) : ('USER.SAVE' | translate) }}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div *ngIf="showDeleteConfirm" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="delete-modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" (click)="cancelDelete()"></div>
+      
+      <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+        <div class="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <div class="sm:flex sm:items-start">
+            <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/30 sm:mx-0 sm:h-10 sm:w-10">
+              <lucide-icon name="alert-triangle" class="h-6 w-6 text-red-600 dark:text-red-400"></lucide-icon>
+            </div>
+            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+              <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white" id="delete-modal-title">
+                {{ 'USER.CONFIRM_DELETE' | translate }}
+              </h3>
+              <div class="mt-2">
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                  {{ 'USER.DELETE_MESSAGE' | translate:{name: userToDelete?.name} }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-gray-50 dark:bg-gray-700/30 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+          <button type="button" (click)="deleteUser()"
+            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+            {{ 'USER.DELETE' | translate }}
+          </button>
+          <button type="button" (click)="cancelDelete()"
+            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+            {{ 'USER.CANCEL' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-toast 
+  *ngIf="showToast" 
+  [message]="toastMessage" 
+  [duration]="toastDuration" 
+  (animationDone)="showToast = false">
+</app-toast>

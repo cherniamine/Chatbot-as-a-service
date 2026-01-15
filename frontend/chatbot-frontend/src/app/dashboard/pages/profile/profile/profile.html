@@ -1,0 +1,281 @@
+<div class="max-w-4xl mx-auto my-8 p-8 bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700/50 space-y-8">
+  
+  <!-- Header -->
+  <div class="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 pb-6">
+    <div class="flex items-center gap-3">
+      <div class="p-3 bg-blue-100/50 dark:bg-blue-900/20 rounded-lg">
+        <lucide-icon name="user" class="w-6 h-6 text-blue-600 dark:text-blue-400"></lucide-icon>
+      </div>
+      <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Mon Profil</h1>
+    </div>
+    <div class="text-sm text-gray-500 dark:text-gray-400">
+      Compte créé le {{ createdAt | date:'dd/MM/yyyy' }}
+    </div>
+  </div>
+
+  <!-- Avatar Section -->
+  <div class="flex flex-col md:flex-row items-start gap-6 p-6 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
+    <div class="flex flex-col items-center gap-4">
+      <div class="relative">
+        <img [src]="avatarUrl" alt="Avatar" (error)="onAvatarLoadError()"
+             class="w-24 h-24 rounded-full border-4 border-white dark:border-gray-700 shadow-lg object-cover">
+        <input #avatarUpload type="file" (change)="onAvatarSelected($event)" accept="image/*" class="hidden">
+        <button (click)="avatarUpload.click()" 
+                class="absolute -bottom-2 -right-2 p-2 bg-blue-600 rounded-full shadow hover:bg-blue-700 transition-colors">
+          <lucide-icon name="camera" class="w-4 h-4 text-white"></lucide-icon>
+        </button>
+      </div>
+      <div class="text-center">
+        <h3 class="font-medium text-gray-800 dark:text-white">{{ userName }}</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400">Utilisateur {{ role }}</p>
+      </div>
+    </div>
+
+    <div class="flex-1 space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Changer d'avatar</label>
+        <div class="flex items-center gap-4">
+          <label for="avatar-upload"
+                 class="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/80 transition-colors">
+            Sélectionner une image
+          </label>
+          <button (click)="uploadAvatar()" [disabled]="!avatarFile || isSubmitting"
+                  class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-blue-400 dark:disabled:bg-blue-900/50 transition-colors">
+            <span *ngIf="!isSubmitting">Mettre à jour</span>
+            <span *ngIf="isSubmitting" class="flex items-center justify-center gap-2">
+              <lucide-icon name="loader" class="w-4 h-4 animate-spin"></lucide-icon>
+            </span>
+          </button>
+        </div>
+        <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">Formats supportés : JPG, PNG (max. 5MB)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Account Info -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    
+    <!-- Accès Professionnel -->
+    <div class="p-6 bg-gray-50 dark:bg-gray-800/50 rounded-xl space-y-4">
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Accès Professionnel</h3>
+
+      <!-- Carte Entreprise -->
+      <div class="p-4 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+        <div class="flex items-center justify-between mb-3">
+          <p class="text-sm text-gray-500 dark:text-gray-400">Votre organisation</p>
+          <span class="text-xs px-2 py-1 rounded-full"
+                [ngClass]="{
+                  'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-200': accessLevel === 'Complet',
+                  'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-200': accessLevel === 'Limité'
+                }">
+            {{ accessLevel }}
+          </span>
+        </div>
+
+        <div class="flex items-center gap-3 mb-3">
+          <div class="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+            <lucide-icon name="building-2" class="w-5 h-5 text-blue-600 dark:text-blue-400"></lucide-icon>
+          </div>
+          <div>
+            <h4 class="font-medium text-gray-800 dark:text-white">{{ companyName }}</h4>
+            <p class="text-xs text-gray-500 dark:text-gray-400">{{ department }}</p>
+          </div>
+        </div>
+
+        <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-600">
+  <h5 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Vos permissions</h5>
+  <ul class="space-y-3">
+
+    <!-- Permissions Admin -->
+    <ng-container *ngIf="role === 'admin'; else userPermissions">
+      <li class="flex items-start gap-2">
+        <lucide-icon name="check" class="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0"></lucide-icon>
+        <span class="text-sm">Création illimitée de chatbots</span>
+      </li>
+      
+      <li class="flex items-start gap-2">
+        <lucide-icon name="check" class="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0"></lucide-icon>
+        <span class="text-sm">Uploader les documents pour les chatbots</span>
+      </li>
+      <li class="flex items-start gap-2">
+        <lucide-icon name="check" class="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0"></lucide-icon>
+        <span class="text-sm">Gestion des accès utilisateurs</span>
+      </li>
+    </ng-container>
+
+    <!-- Permissions User -->
+    <ng-template #userPermissions>
+      <li class="flex items-start gap-2">
+        <lucide-icon name="check" class="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0"></lucide-icon>
+        <span class="text-sm">Utilisation des chatbots limités (créés par votre superviseur)</span>
+      </li>
+      <li class="flex items-start gap-2">
+        <lucide-icon name="check" class="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0"></lucide-icon>
+        <span class="text-sm">Accès à l'historique des conversations</span>
+      </li>
+    </ng-template>
+
+  </ul>
+</div>
+<br>
+</div>
+
+      <!-- Support IT -->
+      <div class="bg-blue-50 dark:bg-blue-900/10 p-4 rounded-lg border border-blue-100 dark:border-blue-900/20">
+        <div class="flex items-start gap-3">
+          <div class="p-1.5 bg-blue-100 dark:bg-blue-900/20 rounded-full">
+            <lucide-icon name="headphones" class="w-4 h-4 text-blue-600 dark:text-blue-400"></lucide-icon>
+          </div>
+          <div>
+            <h4 class="text-sm font-medium text-gray-800 dark:text-white mb-1">Support technique</h4>
+            <p class="text-xs text-gray-600 dark:text-gray-300 mb-2">Pour toute demande concernant vos permissions</p>
+            <a [href]="'mailto:' + itSupportEmail"
+               class="text-sm text-blue-600 dark:text-blue-400 hover:underline inline-flex items-center gap-1">
+              <lucide-icon name="mail" class="w-3 h-3"></lucide-icon>
+              {{ itSupportEmail }}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sécurité / Password -->
+    <div class="p-6 bg-gray-50 dark:bg-gray-800/50 rounded-xl space-y-6">
+      
+      <!-- Email -->
+      <div class="pb-6 border-b border-gray-200 dark:border-gray-700">
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Email professionnel</p>
+        <div class="flex items-center justify-between">
+          <p class="font-medium text-gray-800 dark:text-white">{{ email }}</p>
+          <div class="flex items-center gap-1">
+  <span [ngClass]="emailVerified ? 'text-green-600' : 'text-yellow-600'">
+    <lucide-icon [name]="emailVerified ? 'check-circle' : 'alert-circle'" class="w-4 h-4"></lucide-icon>
+  </span>
+  <span class="text-xs" [ngClass]="emailVerified ? 'text-green-600' : 'text-yellow-600'">
+    {{ emailVerified ? 'Vérifié' : 'Non vérifié' }}
+  </span>
+</div>
+        </div>
+        <button *ngIf="!emailVerified" (click)="resendVerificationEmail()"
+                class="mt-2 text-xs text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1">
+          <lucide-icon name="mail" class="w-3 h-3"></lucide-icon>
+          Renvoyer la vérification
+        </button>
+      </div>
+
+      <!-- Password Form -->
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Sécurité</h3>
+      <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Ancien mot de passe</label>
+          <div class="relative">
+            <input [type]="showOldPassword ? 'text' : 'password'" formControlName="oldPassword"
+                   class="w-full px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-500/50"
+                   placeholder="••••••••">
+            <button type="button" (click)="toggleVisibility('old')"
+                    class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+              <lucide-icon [name]="showOldPassword ? 'eye-off' : 'eye'" class="w-5 h-5"></lucide-icon>
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nouveau mot de passe</label>
+          <div class="relative">
+            <input [type]="showNewPassword ? 'text' : 'password'" formControlName="newPassword"
+                   class="w-full px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-500/50"
+                   placeholder="••••••••">
+            <button type="button" (click)="toggleVisibility('new')"
+                    class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+              <lucide-icon [name]="showNewPassword ? 'eye-off' : 'eye'" class="w-5 h-5"></lucide-icon>
+            </button>
+          </div>
+          <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Minimum 8 caractères avec chiffres et symboles</p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Confirmer mot de passe</label>
+          <div class="relative">
+            <input [type]="showConfirmPassword ? 'text' : 'password'" formControlName="confirmPassword"
+                   class="w-full px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-500/50"
+                   placeholder="••••••••">
+            <button type="button" (click)="toggleVisibility('confirm')"
+                    class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+              <lucide-icon [name]="showConfirmPassword ? 'eye-off' : 'eye'" class="w-5 h-5"></lucide-icon>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" [disabled]="passwordForm.invalid || isSubmitting"
+                class="w-full px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors disabled:opacity-70 disabled:cursor-not-allowed">
+          <span *ngIf="!isSubmitting">Mettre à jour le mot de passe</span>
+          <span *ngIf="isSubmitting" class="flex items-center justify-center gap-2">
+            <lucide-icon name="loader" class="w-4 h-4 animate-spin"></lucide-icon>
+            En cours...
+          </span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+ <!-- Chatbot Stats -->
+<div class="p-6 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
+  <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Statistiques des Chatbots</h3>
+  
+ 
+<!-- Utilisateur normal -->
+<div *ngIf="role !== 'admin'" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+  <div class="p-4 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+    <p class="text-sm text-gray-500 dark:text-gray-400">Chatbots utilisés</p>
+    <p class="text-2xl font-bold text-gray-800 dark:text-white">{{ activeBotsCount }}</p>
+  </div>
+  <div class="p-4 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+    <p class="text-sm text-gray-500 dark:text-gray-400">Dernière connexion</p>
+    <p class="text-2xl font-bold text-gray-800 dark:text-white">
+ {{ lastLogin ? (lastLogin | date:'short') : 'Jamais' }}
+
+</p>
+
+  </div>
+  <div class="p-4 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+    <p class="text-sm text-gray-500 dark:text-gray-400">Interactions (30j)</p>
+    <p class="text-2xl font-bold text-gray-800 dark:text-white">{{ monthlyInteractions }}</p>
+  </div>
+</div>
+
+  <!-- Utilisateur admin -->
+  <div *ngIf="role === 'admin'" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <div class="p-4 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+      <p class="text-sm text-gray-500 dark:text-gray-400">Chatbots créés</p>
+      <p class="text-2xl font-bold text-gray-800 dark:text-white">{{ adminChatbotsCreated }}</p>
+    </div>
+    <div class="p-4 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+      <p class="text-sm text-gray-500 dark:text-gray-400">Documents uploadés</p>
+      <p class="text-2xl font-bold text-gray-800 dark:text-white">{{ adminDocumentsUploaded }}</p>
+    </div>
+    <div class="p-4 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+      <p class="text-sm text-gray-500 dark:text-gray-400">Interactions (30j)</p>
+      <p class="text-2xl font-bold text-gray-800 dark:text-white">{{ adminInteractionsLast30Days }}</p>
+    </div>
+  </div>
+</div>
+
+  <!-- Success/Error Messages -->
+  <div *ngIf="successMessage" class="p-4 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-lg flex items-start gap-3">
+    <lucide-icon name="check-circle" class="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5"></lucide-icon>
+    <p class="text-green-700 dark:text-green-300">{{ successMessage }}</p>
+    <button (click)="clearMessages()" class="ml-auto text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+      <lucide-icon name="x" class="w-5 h-5"></lucide-icon>
+    </button>
+  </div>
+
+  <div *ngIf="errorMessage" class="p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg flex items-start gap-3">
+    <lucide-icon name="alert-circle" class="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5"></lucide-icon>
+    <p class="text-red-700 dark:text-red-300">{{ errorMessage }}</p>
+    <button (click)="clearMessages()" class="ml-auto text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+      <lucide-icon name="x" class="w-5 h-5"></lucide-icon>
+    </button>
+  </div>
+
+</div>
+

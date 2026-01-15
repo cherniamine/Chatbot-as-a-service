@@ -1,0 +1,6 @@
+<div *ngIf="isVisible" class="toast" [@fade] (@fade.done)="onAnimationDone($event)">
+  <div class="toast-content">
+    <p class="toast-message">{{ message }}</p>
+    <button aria-label="Fermer" class="toast-close" (click)="close()">&times;</button>
+  </div>
+</div>

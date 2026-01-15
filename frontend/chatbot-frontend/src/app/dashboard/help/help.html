@@ -1,0 +1,151 @@
+<div class="p-8 max-w-5xl mx-auto bg-white/90 dark:bg-gray-900/95 backdrop-blur-sm text-gray-800 dark:text-gray-100 rounded-xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 space-y-10">
+  <!-- En-tête avec animation -->
+  <header class="flex items-center gap-4 pb-6 border-b border-gray-200/50 dark:border-gray-700/50">
+    <div class="p-3 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 shadow-lg">
+      <lucide-icon name="help-circle" class="w-7 h-7 text-white"></lucide-icon>
+    </div>
+    <div>
+      <h1 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-indigo-400">
+        {{ 'HELP.TITLE' | translate }}
+      </h1>
+      <p class="text-gray-500 dark:text-gray-400 mt-1">{{ 'HELP.SUBTITLE' | translate }}</p>
+    </div>
+  </header>
+
+  <!-- Contenu principal -->
+  <div class="grid md:grid-cols-3 gap-8">
+   
+    <!-- Contenu des sections -->
+    <div class="md:col-span-2 space-y-10">
+      <!-- Section 1: Introduction -->
+      <section id="introduction" class="scroll-mt-20">
+        <div class="flex items-start gap-4">
+          <div class="p-2 mt-1 rounded-lg bg-blue-100/50 dark:bg-blue-900/20">
+            <lucide-icon name="info" class="w-5 h-5 text-blue-600 dark:text-blue-400"></lucide-icon>
+          </div>
+          <div>
+            <h2 class="text-2xl font-semibold mb-3 text-gray-900 dark:text-white">{{ 'HELP.INTRO.TITLE' | translate }}</h2>
+            <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+              {{ 'HELP.INTRO.DESCRIPTION' | translate }}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Accueil -->
+      <section id="home" class="scroll-mt-20">
+        <div class="flex items-start gap-4">
+          <div class="p-2 mt-1 rounded-lg bg-indigo-100/50 dark:bg-indigo-900/20">
+            <lucide-icon name="home" class="w-5 h-5 text-indigo-600 dark:text-indigo-400"></lucide-icon>
+          </div>
+          <div>
+            <h2 class="text-2xl font-semibold mb-3 text-gray-900 dark:text-white">{{ 'HELP.HOME.TITLE' | translate }}</h2>
+            <p class="text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">
+              {{ 'HELP.HOME.DESCRIPTION' | translate }}
+            </p>
+            <ul class="space-y-3">
+              <li class="flex items-start gap-3">
+                <div class="mt-1 w-2 h-2 rounded-full bg-indigo-600 dark:bg-indigo-400"></div>
+                <span class="text-gray-700 dark:text-gray-300">{{ 'HELP.HOME.WELCOME_HEADER' | translate }}</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <div class="mt-1 w-2 h-2 rounded-full bg-indigo-600 dark:bg-indigo-400"></div>
+                <span class="text-gray-700 dark:text-gray-300">{{ 'HELP.HOME.STATS_OVERVIEW' | translate }}</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <div class="mt-1 w-2 h-2 rounded-full bg-indigo-600 dark:bg-indigo-400"></div>
+                <span class="text-gray-700 dark:text-gray-300">{{ 'HELP.HOME.SHORTCUTS_DESCRIPTION' | translate }}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Chatbot -->
+      <section id="chatbot" class="scroll-mt-20">
+        <div class="flex items-start gap-4">
+          <div class="p-2 mt-1 rounded-lg bg-purple-100/50 dark:bg-purple-900/20">
+            <lucide-icon name="bot" class="w-5 h-5 text-purple-600 dark:text-purple-400"></lucide-icon>
+          </div>
+          <div>
+            <h2 class="text-2xl font-semibold mb-3 text-gray-900 dark:text-white">{{ 'HELP.CHATBOT.TITLE' | translate }}</h2>
+            <ol class="space-y-3">
+              <li class="flex items-start gap-3">
+                <span class="flex items-center justify-center mt-1 w-5 h-5 rounded-full bg-purple-600 dark:bg-purple-400 text-white text-xs font-medium">1</span>
+                <span class="text-gray-700 dark:text-gray-300">{{ 'HELP.CHATBOT.CREATE' | translate }}</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="flex items-center justify-center mt-1 w-5 h-5 rounded-full bg-purple-600 dark:bg-purple-400 text-white text-xs font-medium">2</span>
+                <span class="text-gray-700 dark:text-gray-300">{{ 'HELP.CHATBOT.UPLOAD_DOCS' | translate }}</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="flex items-center justify-center mt-1 w-5 h-5 rounded-full bg-purple-600 dark:bg-purple-400 text-white text-xs font-medium">3</span>
+                <span class="text-gray-700 dark:text-gray-300">{{ 'HELP.CHATBOT.INTERACT' | translate }}</span>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Documents -->
+      <section id="documents" class="scroll-mt-20">
+        <div class="flex items-start gap-4">
+          <div class="p-2 mt-1 rounded-lg bg-cyan-100/50 dark:bg-cyan-900/20">
+            <lucide-icon name="file-text" class="w-5 h-5 text-cyan-600 dark:text-cyan-400"></lucide-icon>
+          </div>
+          <div>
+            <h2 class="text-2xl font-semibold mb-3 text-gray-900 dark:text-white">{{ 'HELP.DOCS.TITLE' | translate }}</h2>
+            <ul class="space-y-3">
+              <li class="flex items-start gap-3">
+                <div class="mt-1.5 w-2 h-2 rounded-full bg-cyan-600 dark:bg-cyan-400"></div>
+                <span class="text-gray-700 dark:text-gray-300">{{ 'HELP.DOCS.SUPPORTED' | translate }}</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <div class="mt-1.5 w-2 h-2 rounded-full bg-cyan-600 dark:bg-cyan-400"></div>
+                <span class="text-gray-700 dark:text-gray-300">{{ 'HELP.DOCS.UPLOAD' | translate }}</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <div class="mt-1.5 w-2 h-2 rounded-full bg-cyan-600 dark:bg-cyan-400"></div>
+                <span class="text-gray-700 dark:text-gray-300">{{ 'HELP.DOCS.DELETE' | translate }}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Historique -->
+      <section id="history" class="scroll-mt-20">
+        <div class="flex items-start gap-4">
+          <div class="p-2 mt-1 rounded-lg bg-green-100/50 dark:bg-green-900/20">
+            <lucide-icon name="history" class="w-5 h-5 text-green-600 dark:text-green-400"></lucide-icon>
+          </div>
+          <div>
+            <h2 class="text-2xl font-semibold mb-3 text-gray-900 dark:text-white">{{ 'HELP.HISTORY.TITLE' | translate }}</h2>
+            <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+              {{ 'HELP.HISTORY.DESC' | translate }}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6: Contact -->
+      <section id="contact" class="scroll-mt-20 pt-8 border-t border-gray-200/50 dark:border-gray-700/50">
+        <div class="flex items-start gap-4">
+          <div class="p-2 mt-1 rounded-lg bg-red-100/50 dark:bg-red-900/20">
+            <lucide-icon name="mail" class="w-5 h-5 text-red-600 dark:text-red-400"></lucide-icon>
+          </div>
+          <div>
+            <h2 class="text-2xl font-semibold mb-3 text-gray-900 dark:text-white">{{ 'HELP.CONTACT.TITLE' | translate }}</h2>
+            <p class="text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">
+              {{ 'HELP.CONTACT.DESC' | translate }}
+            </p>
+            <div class="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 dark:bg-blue-900/30 rounded-lg border border-blue-200 dark:border-blue-800/50">
+              <lucide-icon name="mail" class="w-5 h-5 text-blue-600 dark:text-blue-400"></lucide-icon>
+              <span class="font-medium text-blue-600 dark:text-blue-400">support&#64;insomea.com</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>

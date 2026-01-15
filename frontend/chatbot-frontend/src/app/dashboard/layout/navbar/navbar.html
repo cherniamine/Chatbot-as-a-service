@@ -1,0 +1,168 @@
+<nav class="bg-white/80 backdrop-blur-md border-b border-gray-100 px-6 py-3 shadow-sm dark:bg-gray-900/80 dark:border-gray-800 flex justify-between items-center sticky top-0 z-50">
+  <!-- Logo avec animation au hover -->
+<div class="flex items-center gap-3">
+  <!-- Logo sans fond ni bord -->
+  <img 
+    src="assets/chatbot.png" 
+    alt="ChatNex Logo" 
+    class="w-10 h-10 
+           drop-shadow-[0_2px_4px_rgba(79,70,229,0.3)] 
+           hover:drop-shadow-[0_4px_6px_rgba(79,70,229,0.4)] 
+           transition-all duration-300 
+           hover:scale-110 hover:-translate-y-0.5"
+  />
+
+  <!-- Texte avec effet dégradé -->
+  <span 
+    class="text-xl font-semibold text-transparent bg-clip-text 
+           bg-gradient-to-r from-indigo-600 to-blue-600 
+           dark:from-indigo-400 dark:to-blue-500 
+           tracking-tight transition-all duration-500 
+           hover:bg-gradient-to-r hover:from-indigo-700 hover:to-blue-700 
+           dark:hover:from-indigo-300 dark:hover:to-blue-400"
+  >
+    {{ 'APP.TITLE' | translate }}
+  </span>
+</div>
+
+
+  <!-- Actions utilisateur -->
+  <div class="flex items-center gap-4">
+
+    <!-- Recherche avancée avec icône intégrée -->
+    <div class="hidden md:block relative w-64">
+      <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+        <lucide-icon name="search" class="w-4 h-4 text-gray-400"></lucide-icon>
+      </div>
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        (keyup.enter)="onSearch()"
+        placeholder="{{ 'NAV.SEARCH' | translate }}"
+        class="pl-10 pr-4 py-2 w-full text-sm rounded-lg border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 text-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition-all duration-200"
+      />
+    </div>
+
+    <!-- Avatar avec badge de statut -->
+    <div class="relative">
+      <button class="flex items-center gap-2 group">
+        <div class="relative">
+          <img 
+            [src]="avatarUrl" 
+            (error)="avatarUrl = 'assets/user-avatar.png'"
+            alt="User" 
+            class="w-9 h-9 rounded-full border-2 border-white dark:border-gray-800 shadow-sm group-hover:ring-2 group-hover:ring-blue-500 transition-all duration-200" 
+          />
+           <!--<span class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-800"></span> -->
+        </div>
+        <span class="hidden md:inline text-sm font-medium text-gray-700 dark:text-gray-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+          {{ userName }}
+          <lucide-icon name="chevron-down" class="w-4 h-4 inline ml-1 opacity-70"></lucide-icon>
+        </span>
+      </button>
+    </div>
+     
+    <!-- Menu Paramètres avec animation améliorée -->
+    <div class="relative">
+      <button
+        (click)="toggleSettings()"
+        class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 hover:rotate-45 [&:not(:hover)]:animate-pulse"
+        [title]="'NAV.SETTINGS' | translate"
+        [attr.aria-expanded]="showSettings"
+      >
+        <lucide-icon name="settings" class="w-5 h-5 text-gray-600 dark:text-gray-300"></lucide-icon>
+      </button>
+
+      <!-- Menu déroulant avec transitions fluides -->
+      <div
+        *ngIf="showSettings"
+        @fadeInDown
+        class="absolute right-0 mt-2 w-64 bg-white/95 dark:bg-gray-800/95 backdrop-blur-lg rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden"
+      >
+        <!-- Header du menu -->
+        <div class="px-4 py-3 border-b border-gray-100 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-700 dark:to-gray-800">
+          <h3 class="text-sm font-semibold text-gray-800 dark:text-white flex items-center gap-2">
+            <lucide-icon name="user" class="w-4 h-4"></lucide-icon>
+            {{ userName }}
+          </h3>
+          <p class="text-xs text-gray-500 dark:text-gray-400 truncate">Administrateur</p>
+        </div>
+
+        <div class="divide-y divide-gray-100 dark:divide-gray-700">
+          <!-- Profil -->
+          <a routerLink="/dashboard/profile" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+            <div class="p-2 rounded-lg bg-blue-50 dark:bg-gray-700">
+              <lucide-icon name="user" class="w-5 h-5 text-blue-600 dark:text-blue-400"></lucide-icon>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-800 dark:text-white">Mon Profil</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Gérer votre compte</p>
+            </div>
+          </a>
+
+          <!-- Dark Mode Toggle amélioré -->
+          <div class="flex items-center justify-between px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer transition-colors">
+            <div class="flex items-center gap-3">
+              <div class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700">
+                <lucide-icon [name]="isDarkMode ? 'moon' : 'sun'" class="w-5 h-5 text-gray-600 dark:text-yellow-400"></lucide-icon>
+              </div>
+              <span class="text-sm font-medium text-gray-800 dark:text-white">{{ 'NAV.DARK_MODE' | translate }}</span>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input 
+                type="checkbox"
+                [checked]="isDarkMode"
+                (click)="$event.stopPropagation()"
+                (change)="toggleDarkMode()"
+                class="sr-only peer"
+              >
+              <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+            </label>
+          </div>
+
+          <!-- Sélecteur de langue amélioré -->
+          <div class="px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+            <label class="flex items-center gap-3 mb-2">
+              <div class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700">
+                <lucide-icon name="globe" class="w-5 h-5 text-gray-600 dark:text-gray-300"></lucide-icon>
+              </div>
+              <span class="text-sm font-medium text-gray-800 dark:text-white">{{ 'NAV.LANGUAGE' | translate }}</span>
+            </label>
+            <select
+              [(ngModel)]="selectedLanguage"
+              (change)="onLanguageChange()"
+              class="block w-full text-sm p-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+            >
+              <option value="fr">{{ 'NAV.FRENCH' | translate }}</option>
+              <option value="en">{{ 'NAV.ENGLISH' | translate }}</option>
+              <option value="ar">{{ 'NAV.ARABIC' | translate }}</option>
+            </select>
+          </div>
+
+          <!-- Aide avec badge -->
+          <a routerLink="/dashboard/help" class="flex items-center justify-between px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+            <div class="flex items-center gap-3">
+              <div class="p-2 rounded-lg bg-purple-50 dark:bg-gray-700">
+                <lucide-icon name="help-circle" class="w-5 h-5 text-purple-600 dark:text-purple-400"></lucide-icon>
+              </div>
+              <span class="text-sm font-medium text-gray-800 dark:text-white">{{ 'NAV.HELP' | translate }}</span>
+            </div>
+            <span class="px-2 py-0.5 text-xs rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300">{{'NEW'| translate }}</span>
+          </a>
+
+          <!-- Déconnexion avec séparateur -->
+          <div 
+            (click)="logout()"
+            class="flex items-center gap-3 px-4 py-3 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 cursor-pointer transition-colors"
+          >
+            <div class="p-2 rounded-lg bg-red-50 dark:bg-red-900/30">
+              <lucide-icon name="log-out" class="w-5 h-5"></lucide-icon>
+            </div>
+            <span class="text-sm font-medium">{{ 'NAV.LOGOUT' | translate }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+

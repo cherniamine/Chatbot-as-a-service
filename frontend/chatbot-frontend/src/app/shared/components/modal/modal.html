@@ -1,0 +1,22 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" *ngIf="show">
+  <div class="bg-white dark:bg-gray-900 rounded shadow-md max-w-lg w-full p-6">
+    <div class="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">
+      {{ title | translate }}
+    </div>
+    
+    <ng-content></ng-content>
+
+    <div class="mt-4 text-right">
+      <button
+        class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded mr-2"
+        (click)="onCancel()">
+        {{ 'COMMON.CANCEL' | translate }}
+      </button>
+      <button
+        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+        (click)="onConfirm()">
+        {{ 'COMMON.CONFIRM' | translate }}
+      </button>
+    </div>
+  </div>
+</div>

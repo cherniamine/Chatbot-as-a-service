@@ -1,0 +1,250 @@
+{
+  "APP": {
+    "TITLE": "Service de Chatbot",
+    "WELCOME": "Bienvenue",
+    "LOADING": "Chargement...",
+    "NO_DATA": "Aucune donnée disponible",
+    "ERROR": "Erreur",
+    "ERROR_REQUIRED": "est requis",
+    "ERROR_MAX_LENGTH": "dépasse la longueur maximale",
+    "PROCESSING": "Traitement en cours...",
+    "SEARCH": "Rechercher des chatbots..."
+  },
+   "STATUS": {
+      "ACTIVE": "Actif",
+      "INACTIVE": "Inactif"
+   },
+  "NAV": {
+    "DASHBOARD": "Tableau de bord",
+    "CHATBOTS": "Chatbots",
+     "FRENCH": "Français",
+    "ENGLISH": "English",
+    "ARABIC": "Arabe",
+    "DOCUMENTS": "Documents",
+    "HISTORY": "Historique",
+    "SETTINGS": "Paramètres",
+    "LOGOUT": "Déconnexion",
+    "DARK_MODE": "Mode sombre",
+    "LANGUAGE": "Langue",
+    "HELP": "Aide",
+    "SEARCH": "Recherche"
+  },
+  
+  "SIDEBAR": {
+    "HOME": "Accueil",
+    "CHATBOTS": "Chatbots",
+    "DOCUMENTS": "Documents",
+    "HISTORY": "Historique",
+     "SETTINGS": "Paramètres"
+  },
+"NEW": "Nouveau",
+
+  "CHATBOT": {
+    "SELECT_LABEL": "Sélectionnez un chatbot",
+    "LIST_TITLE": "Liste des Chatbots",
+    "PLAY_AGAIN": "Réécouter",
+    "LIST": "Liste",
+    "CREATE_TITLE": "Nouveau Chatbot",
+    "NAME": "Nom",
+    "NAME_PLACEHOLDER": "Ex: Assistant médical",
+    "DESCRIPTION": "Description",
+    "DESCRIPTION_PLACEHOLDER": "Exemple : Assistant client IA",
+    "CREATE": "Créer",
+    "DELETE": "Supprimer",
+    "DELETE_CONFIRM": "Êtes-vous sûr de vouloir supprimer ce chatbot ?",
+    "RENAME": "Renommer",
+    "CHAT": "Discuter",
+    "SELECT": "Sélectionner un chatbot",
+    "NO_CHATBOTS": "Aucun chatbot trouvé",
+    "ID": "ID",
+     "NO_CHATBOTS_HELP": "Commencez par créer votre premier chatbot pour interagir avec vos documents",
+     "STATUS": {
+    "ACTIVE": "Actif",
+    "INACTIVE": "Inactif"}
+    
+  },
+  "DOCUMENT": {
+    "UPLOAD_TITLE": "Importer un document",
+    "UPLOAD_DESC": "Ajoutez vos fichiers pour analyse",
+    "DRAG_DROP": "Glissez-déposez ou",
+    "BROWSE": "parcourir",
+    "FORMATS": "Formats supportés",
+    "UPLOAD_BTN": "Importer le document",
+    "PROCESSING": "Traitement...",
+    "REMOVE": "Supprimer",
+    "LIST_TITLE": "Documents liés",
+    "NO_DOCUMENTS": "Aucun document trouvé",
+    "FILENAME": "Nom du fichier",
+     "LIST_BUTTON": "Liste des documents",
+    "DELETE_BUTTON": "Supprimer le document",
+    "DELETE_CONFIRM": "Êtes-vous sûr de vouloir supprimer ce document ?",
+    "DELETE_ERROR": "Erreur lors de la suppression",
+    "DELETE_SUCCESS": "Document supprimé avec succès",
+    "NO_DOCUMENTS_TITLE": "Aucun document disponible",
+    "NO_DOCUMENTS_DESC": "Commencez par importer votre premier document",
+    "UPLOAD_BUTTON": "Importer un document",
+    "FILTER_BY_DATE": "Filtrer par date",
+    "CLEAR_FILTER": "Effacer le filtre",
+     "DELETE_CONFIRM_TITLE": "Supprimer le document",
+    "DELETE_CONFIRM_MESSAGE": "Êtes-vous sûr de vouloir supprimer ce document ? Cette action est irréversible."
+  },
+  "COMMON": {
+    "CANCEL": "Annuler",
+    "DELETE": "Supprimer"
+  },
+
+  "HISTORY": {
+    "TITLE": "Historique des conversations",
+    "SELECT_CHATBOT": "Choisir un chatbot",
+    "START_DATE": "Date de début",
+    "END_DATE": "Date de fin",
+    "LOAD": "Charger l'historique",
+    "QUESTION": "Question",
+    "ANSWER": "Réponse",
+    "SUMMARY": "Résumé",
+    "SOURCES": "Sources",
+    "TIMESTAMP": "Date",
+    "NO_MESSAGES": "Aucun message trouvé",
+     "SELECT_CHATBOT_DESC": "Sélectionnez un chatbot pour gérer ses documents"
+  },
+  
+  "DASHBOARD": {
+    "WELCOME_TITLE": "Bienvenue sur votre Tableau de bord",
+    "WELCOME_SUBTITLE": "Accès rapide à vos chatbots, documents et utlisateurs supervisés.",
+    "STATS": {
+      "TOTAL_CHATBOTS": "Total des Chatbots",
+      "SUPERVISED_USERS": "Utilisateurs supervisés",
+      "UPLOADED_DOCS": "Documents téléchargés",
+      "CONVERSATIONS": "Conversations",
+      "ACTIVE_BOTS": "Actifs",
+      "BOTS": "{{count}} bot actif{{plural}}",
+      "LAST_UPLOAD": "Dernier téléchargement",
+      "NO_UPLOADS": "Aucun document téléchargé",
+      "DATE_NOT_AVAILABLE": "Date non disponible",
+      "ACTIVE": "actif(s)"
+    },
+    "ACTIONS": {
+      "CREATE_NEW": "Créer nouveau",
+      "MANAGE_USERS": "Utilisateurs sous votre supervision",
+      "UPGRADE_NOW": "Mettre à niveau maintenant"
+    },
+    "PRO_TIP": {
+      "TITLE": "Astuce Pro",
+      "DESCRIPTION": "Passez à la version premium pour des analyses avancées et des documents illimités."
+    },
+    "SHORTCUTS": {
+      "CHATBOTS": {
+        "TITLE": "Gérer les Chatbots",
+        "DESCRIPTION": "Créer, modifier ou supprimer vos chatbots"
+      },
+      "DOCUMENTS": {
+        "TITLE": "Gérer les Documents",
+        "DESCRIPTION": "Télécharger et lier des documents à vos chatbots"
+      },
+      "USERS": {
+        "TITLE": "Gestion des Utilisateurs",
+        "DESCRIPTION": "Voir et gérer les utilisateurs que vous supervisez"
+      },
+       "HELP": {
+      "TITLE": "Besoin d'aide ?",
+      "DESCRIPTION": "Accédez à notre documentation et ressources d'assistance"
+    },
+    "ACTIONS": {
+      "GET_HELP": "Obtenir de l'aide"
+    }
+
+    }
+  },
+
+  "CHAT": {
+    "TITLE": "Chat",
+    "PLACEHOLDER": "Écrivez votre message...",
+    "SEND": "Envoyer",
+    "RESET": "Réinitialiser",
+    "THINKING": "Réflexion en cours...",
+    "NO_CHATBOT": "Chatbot ID non spécifié",
+    "SOURCES": "Sources",
+    "VOICE_MESSAGE": "Enregistrement vocal",
+    "PREVIEW": "Préécoute",
+     "RECORDING": "Enregistrement en cours..."
+
+  },
+  "MODAL": {
+    "CONFIRM": "Confirmer",
+    "CANCEL": "Annuler",
+    "RENAME_TITLE": "Renommer le Chatbot",
+    "RENAME_PLACEHOLDER": "Nouveau nom",
+     "TITLE": "Titre de la boîte de dialogue"
+  },
+  "COMMON": {
+    "CANCEL": "Annuler",
+    "DELETE": "Supprimer"
+  },
+  "HELP": {
+      "TITLE": "Aide",
+      "SUBTITLE": "Trouvez des réponses à vos questions et apprenez à utiliser la plateforme",
+      "INTRO": {
+        "TITLE": "Introduction",
+        "DESCRIPTION": "Bienvenue sur la page d’aide. Vous trouverez ici des informations pour utiliser l’application."
+      },
+      "CHATBOT": {
+        "TITLE": "Chatbot",
+        "CREATE": "Créer facilement un nouveau chatbot.",
+        "UPLOAD_DOCS": "Téléchargez vos documents pour entraîner le chatbot.",
+        "INTERACT": "Interagissez avec le chatbot pour poser vos questions."
+      },
+      "DOCS": {
+        "TITLE": "Documents",
+        "SUPPORTED": "Types de fichiers supportés : PDF, Word, etc.",
+        "UPLOAD": "Comment téléverser un nouveau document.",
+        "DELETE": "Supprimer les documents indésirables."
+      },
+      "HISTORY": {
+        "TITLE": "Historique",
+        "DESC": "Vous pouvez consulter l’historique de vos interactions avec le chatbot ici."
+      },
+      "CONTACT": {
+        "TITLE": "Assistance",
+        "DESC": "Si vous avez besoin d’aide supplémentaire, veuillez nous contacter à l’adresse e-mail suivante :"
+      },
+          "HOME": {
+      "TITLE": "Accueil",
+      "DESCRIPTION": "Découvrez le tableau de bord avec un aperçu rapide des statistiques et des raccourcis essentiels.",
+      "WELCOME_HEADER": "Un message de bienvenue personnalisé vous guide pour démarrer efficacement.",
+      "STATS_OVERVIEW": "Statistiques en temps réel sur vos chatbots, documents téléchargés, conversations et bots actifs.",
+      "SHORTCUTS_DESCRIPTION": "Raccourcis interactifs vers les sections principales : Chatbots, Documents et Historique."
+    }
+  },
+
+    "USER": {
+    "TITLE": "Utilisateurs supervisés",
+    "LOADING": "Chargement des utilisateurs...",
+    "NAME": "Nom",
+    "EMAIL": "Email",
+    "ROLE": "Rôle",
+    "ACTIONS": "Actions",
+    "EDIT": "Modifier",
+    "DELETE": "Supprimer",
+    "ADD": "Ajouter un utilisateur",
+    "NO_USERS": "Aucun utilisateur trouvé.",
+    "ADD_USER": "Ajouter un utilisateur",
+    "EDIT_USER": "Modifier l'utilisateur",
+    "SAVE": "Enregistrer",
+    "UPDATE": "Mettre à jour",
+    "CANCEL": "Annuler",
+    "CONFIRM_DELETE": "Confirmer la suppression",
+    "DELETE_MESSAGE": "Êtes-vous sûr de vouloir supprimer l'utilisateur \"{{name}}\" ?",
+    "FORM": {
+      "NAME": "Nom",
+      "EMAIL": "Email",
+      "PASSWORD": "Mot de passe",
+      "ROLE": "Rôle",
+      "ROLES": {
+        "USER": "Utilisateur",
+        "ADMIN": "Administrateur"
+      }
+    },
+    "EMPTY_STATE_DESCRIPTION": "Commencez par ajouter un nouvel utilisateur au système."
+  }
+
+}

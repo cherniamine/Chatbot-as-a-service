@@ -1,0 +1,130 @@
+.page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+ 
+}
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 500px;
+  height: 600px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.chat-header {
+  display: flex;
+  align-items: center;
+  background-color: #3f51b5;
+  color: white;
+  padding: 16px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+.bot-name {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.status {
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+.chat-body {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  background: #f7f9fc;
+}
+
+.message-group {
+  margin-bottom: 12px;
+}
+
+.message {
+  max-width: 80%;
+  padding: 10px 14px;
+  border-radius: 16px;
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+.user {
+  align-self: flex-end;
+  background-color: #dcf8c6;
+  margin-left: auto;
+}
+
+.bot {
+  align-self: flex-start;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+}
+
+.sources {
+  font-size: 11px;
+  color: #888;
+  margin-top: 4px;
+}
+
+.chat-input {
+  display: flex;
+  padding: 12px;
+  border-top: 1px solid #e0e0e0;
+  background: #fff;
+
+  input {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    margin-right: 8px;
+    outline: none;
+  }
+
+  button {
+    background-color: #3f51b5;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 0 16px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+}
+
+.loading {
+  text-align: center;
+  color: #999;
+  font-style: italic;
+  margin-top: 10px;
+}
+.reset-btn {
+  margin-left: auto;
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0 8px;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: rotate(90deg);
+  }
+}
+
+

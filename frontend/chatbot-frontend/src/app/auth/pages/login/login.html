@@ -1,0 +1,213 @@
+<div class="min-h-screen flex items-center justify-center px-4 py-12 relative overflow-hidden">
+  <!-- Fond animé -->
+  <div class="absolute inset-0 z-0 overflow-hidden">
+    <!-- Couche dégradée de fond -->
+    <div class="absolute inset-0 bg-gradient-to-br from-indigo-900/70 via-purple-900/60 to-blue-900/50 dark:from-indigo-900/80 dark:via-purple-900/70 dark:to-blue-900/60"></div>
+
+    <!-- Points connectés animés -->
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:30px_30px] animate-grid-fade"></div>
+
+    <!-- Lignes de données animées -->
+    <div class="absolute inset-0 opacity-20">
+      <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="lineGradient" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#4f46e5" stop-opacity="0" />
+            <stop offset="50%" stop-color="#4f46e5" stop-opacity="0.5" />
+            <stop offset="100%" stop-color="#4f46e5" stop-opacity="0" />
+          </linearGradient>
+        </defs>
+        <g stroke="url(#lineGradient)" stroke-width="0.5">
+          <line x1="0" y1="10%" x2="100%" y2="10%" class="animate-line-flow" />
+          <line x1="0" y1="30%" x2="100%" y2="30%" class="animate-line-flow delay-500" />
+          <line x1="0" y1="50%" x2="100%" y2="50%" class="animate-line-flow delay-1000" />
+          <line x1="0" y1="70%" x2="100%" y2="70%" class="animate-line-flow delay-1500" />
+          <line x1="0" y1="90%" x2="100%" y2="90%" class="animate-line-flow delay-2000" />
+        </g>
+      </svg>
+    </div>
+
+    <!-- Robot Gauche -->
+   <!-- Robot Gauche (immobile et agrandi) -->
+<ng-lottie 
+  [options]="leftRobotOptions" 
+  class="absolute bottom-10 left-10 fixed-bot animate-left-bot pointer-events-none opacity-90 z-10">
+</ng-lottie>
+
+<!-- Robot Droit (immobile et agrandi) -->
+<ng-lottie 
+  [options]="rightRobotOptions" 
+  class="absolute bottom-10 right-10 fixed-bot animate-right-bot pointer-events-none opacity-90 z-10">
+</ng-lottie>
+
+  </div>
+
+  <!-- Carte de connexion -->
+  <div class="max-w-md w-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-lg rounded-2xl shadow-2xl p-8 space-y-8 border border-gray-200/50 dark:border-gray-700/50 relative z-10 transition-all duration-300 hover:shadow-3xl">
+    
+  <!-- Logo + Titre avec animation IA -->
+<div class="text-center space-y-2">
+  <div class="flex justify-center">
+    <div class=" transition-all duration-300 group ">
+      <img 
+        src="assets/chatbot.png" 
+        alt="Chatbot Logo"
+        class="w-14 h-14 object-contain filter brightness-110 contrast-110 group-hover:animate-bounce"
+      />
+    </div>
+  </div>
+  <h2 class="text-3xl font-bold text-gray-900 dark:text-white mt-4">
+    Connexion
+  </h2>
+  <p class="text-gray-500 dark:text-gray-400">
+    Accédez à votre <span class="text-indigo-600 dark:text-indigo-400 font-medium">Chatbot as a Service</span>
+  </p>
+</div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="space-y-6">
+      <!-- Email -->
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          Adresse email
+        </label>
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <lucide-icon name="mail" class="h-5 w-5 text-gray-400"></lucide-icon>
+          </div>
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            placeholder="exemple@domaine.com"
+            class="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white/50 dark:bg-gray-700/50 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition-all"
+            [class.border-red-500]="form.get('email')?.invalid && form.get('email')?.touched"
+          />
+        </div>
+        <p *ngIf="form.get('email')?.invalid && form.get('email')?.touched" class="text-red-500 text-xs mt-1.5 ml-1">
+          Veuillez entrer une adresse email valide.
+        </p>
+      </div>
+
+      <!-- Password -->
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          Mot de passe
+        </label>
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <lucide-icon name="lock" class="h-5 w-5 text-gray-400"></lucide-icon>
+          </div>
+          <input
+            id="password"
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="••••••••"
+            class="w-full pl-10 pr-12 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white/50 dark:bg-gray-700/50 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition-all"
+            [class.border-red-500]="form.get('password')?.invalid && form.get('password')?.touched"
+          />
+          <button
+            type="button"
+            (click)="togglePasswordVisibility()"
+            class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none transition-colors"
+            aria-label="Toggle password visibility"
+          >
+            <lucide-icon [name]="showPassword ? 'eye-off' : 'eye'" class="w-5 h-5"></lucide-icon>
+          </button>
+        </div>
+        <p *ngIf="form.get('password')?.invalid && form.get('password')?.touched" class="text-red-500 text-xs mt-1.5 ml-1">
+          Le mot de passe est requis.
+        </p>
+      </div>
+
+      <!-- Remember + Forgot -->
+      <div class="flex items-center justify-between">
+        <div class="flex items-center">
+          <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700">
+          <label for="remember-me" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">
+            Se souvenir de moi
+          </label>
+        </div>
+        <div class="text-sm">
+           <a 
+    [routerLink]="['/auth/forgot-password']" 
+    class="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
+  >
+    Mot de passe oublié ?
+  </a>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        [disabled]="form.invalid || isLoading"
+        class="w-full py-3 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-medium rounded-lg shadow-md transition-all transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-60 disabled:transform-none"
+      >
+        <span *ngIf="!isLoading">Se connecter</span>
+        <span *ngIf="isLoading" class="flex items-center justify-center">
+          <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          Connexion...
+        </span>
+      </button>
+    </form>
+
+    <!-- Social Login -->
+    <div class="mt-6">
+      <div class="relative">
+        <div class="absolute inset-0 flex items-center">
+          <div class="w-full border-t border-gray-300 dark:border-gray-600"></div>
+        </div>
+        <div class="relative flex justify-center text-sm">
+          <span class="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
+            Ou continuer avec
+          </span>
+        </div>
+      </div>
+
+     <div class="mt-6 grid grid-cols-2 gap-3">
+  <!-- GitHub -->
+  <button 
+    type="button"
+    (click)="loginWithGithub()"
+    class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+  >
+    <lucide-icon name="github" class="w-5 h-5"></lucide-icon>
+  </button>
+
+  <!-- Google -->
+  <button 
+    type="button"
+    (click)="loginWithGoogle()"
+    class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+  >
+    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 533.5 544.3">
+      <path fill="#4285F4" d="M533.5 278.4c0-17.7-1.6-35.1-4.6-51.9H272v98.4h147.2c-6.4 34.8-25.5 64.3-54.5 84.1v69h87.8c51.4-47.4 81-117.4 81-199.6z"/>
+      <path fill="#34A853" d="M272 544.3c73.7 0 135.6-24.3 180.8-66.1l-87.8-69c-24.4 16.4-55.6 26-93 26-71.5 0-132-48.1-153.7-112.8h-90.4v70.7C84.8 467.7 171.9 544.3 272 544.3z"/>
+      <path fill="#FBBC05" d="M118.3 322.4c-10.8-31.5-10.8-65.8 0-97.3v-70.7H27.9c-34.9 69.9-34.9 151.1 0 221.1l90.4-70.7z"/>
+      <path fill="#EA4335" d="M272 107.7c39.9-.6 78 14 107.3 40.3l80.4-80.4C405.8 24.3 343.9 0 272 0 171.9 0 84.8 76.6 27.9 154.4l90.4 70.7C140 155.8 200.5 107.7 272 107.7z"/>
+    </svg>
+  </button>
+</div>
+
+    <!-- Link to Register -->
+    <div class="text-center text-sm text-gray-500 dark:text-gray-400">
+      <p>
+        Nouveau sur la plateforme ? 
+        <a routerLink="/auth/register" class="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors">
+          Créer un compte
+        </a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <app-toast
+    *ngIf="showToast"
+    [message]="toastMessage"
+    [duration]="toastDuration"
+    (animationDone)="showToast = false"
+  ></app-toast>
+</div>

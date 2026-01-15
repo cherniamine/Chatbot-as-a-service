@@ -1,0 +1,14 @@
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* Disable Material's base styles */
+.mat-typography {
+  font-family: inherit;
+  line-height: inherit;
+}
+
+/* Ensure buttons & inputs use Tailwind */
+.mat-mdc-button, .mat-mdc-input {
+  font-family: inherit !important;
+}
+

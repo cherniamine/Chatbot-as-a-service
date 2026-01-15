@@ -1,0 +1,31 @@
+:host {
+  display: block;
+}
+
+input[type="file"] {
+  visibility: hidden;
+  position: absolute;
+}
+
+.avatar-container {
+  position: relative;
+  .avatar-edit-btn {
+    position: absolute;
+    bottom: -0.5rem;
+    right: -0.5rem;
+  }
+}
+
+.password-toggle {
+  &:hover {
+    color: var(--color-gray-700);
+  }
+}
+
+.dark {
+  .password-toggle {
+    &:hover {
+      color: var(--color-gray-300);
+    }
+  }
+}

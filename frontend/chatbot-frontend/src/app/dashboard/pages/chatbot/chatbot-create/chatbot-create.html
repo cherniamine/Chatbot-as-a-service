@@ -1,0 +1,111 @@
+<div class="max-w-2xl mx-auto p-8 bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700/50">
+  <!-- Header Section -->
+  <div class="flex justify-between items-center mb-8">
+    <div class="flex items-center gap-3">
+      <div class="p-3 bg-indigo-100 dark:bg-indigo-900/20 rounded-lg">
+        <lucide-icon name="bot" class="w-6 h-6 text-indigo-600 dark:text-indigo-400"></lucide-icon>
+      </div>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
+        {{ 'CHATBOT.CREATE_TITLE' | translate }}
+      </h2>
+    </div>
+
+    <!-- List Button -->
+    <button
+      type="button"
+      (click)="navigateToList()"
+      class="flex items-center gap-2 px-4 py-2 text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300
+             bg-indigo-50 dark:bg-indigo-900/20 hover:bg-indigo-100 dark:hover:bg-indigo-900/30 rounded-lg
+             transition-colors duration-200"
+    >
+      <lucide-icon name="list" class="w-5 h-5"></lucide-icon>
+      <span>{{ 'CHATBOT.LIST' | translate }}</span>
+    </button>
+  </div>
+
+  <!-- Form Section -->
+  <form [formGroup]="chatbotForm" (ngSubmit)="onSubmit()" class="space-y-6">
+    <!-- Name Field -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        {{ 'CHATBOT.NAME' | translate }}
+        <span class="text-red-500">*</span>
+      </label>
+      <div class="relative">
+        <input
+          type="text"
+          formControlName="name"
+          [placeholder]="'CHATBOT.NAME_PLACEHOLDER' | translate"
+          class="block w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg
+                 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500
+                 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500
+                 transition-all duration-200"
+        />
+        <div *ngIf="chatbotForm.get('name')?.invalid && chatbotForm.get('name')?.touched" 
+             class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+          <lucide-icon name="alert-circle" class="w-5 h-5 text-red-500"></lucide-icon>
+        </div>
+      </div>
+      <div *ngIf="chatbotForm.get('name')?.invalid && chatbotForm.get('name')?.touched"
+           class="mt-2 text-sm text-red-600 dark:text-red-400 flex items-start gap-1">
+        <lucide-icon name="alert-circle" class="w-4 h-4 mt-0.5 flex-shrink-0"></lucide-icon>
+        {{ 'CHATBOT.NAME' | translate }} {{ 'APP.ERROR_REQUIRED' | translate }}
+      </div>
+    </div>
+
+    <!-- Description Field -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        {{ 'CHATBOT.DESCRIPTION' | translate }}
+      </label>
+      <div class="relative">
+        <textarea
+          formControlName="description"
+          [placeholder]="'CHATBOT.DESCRIPTION_PLACEHOLDER' | translate"
+          rows="4"
+          class="block w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg
+                 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500
+                 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500
+                 transition-all duration-200"
+        ></textarea>
+        <div *ngIf="chatbotForm.get('description')?.invalid && chatbotForm.get('description')?.touched" 
+             class="absolute inset-y-0 right-0 flex items-start pr-3 pt-3 pointer-events-none">
+          <lucide-icon name="alert-circle" class="w-5 h-5 text-red-500"></lucide-icon>
+        </div>
+      </div>
+      <div *ngIf="chatbotForm.get('description')?.invalid && chatbotForm.get('description')?.touched"
+           class="mt-2 text-sm text-red-600 dark:text-red-400 flex items-start gap-1">
+        <lucide-icon name="alert-circle" class="w-4 h-4 mt-0.5 flex-shrink-0"></lucide-icon>
+        {{ 'CHATBOT.DESCRIPTION' | translate }} {{ 'APP.ERROR_MAX_LENGTH' | translate }}
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="pt-2">
+      <button
+        type="submit"
+        [disabled]="chatbotForm.invalid || submitting"
+        class="w-full flex justify-center items-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-600 to-blue-600
+               hover:from-indigo-700 hover:to-blue-700 text-white font-semibold rounded-lg shadow-md
+               transition-all duration-200 transform hover:-translate-y-0.5
+               disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none"
+      >
+        <span *ngIf="!submitting" class="inline-flex items-center gap-2">
+          <lucide-icon name="plus" class="w-5 h-5"></lucide-icon>
+          {{ 'CHATBOT.CREATE' | translate }}
+        </span>
+        <span *ngIf="submitting" class="inline-flex items-center gap-2">
+          <lucide-icon name="loader-2" class="w-5 h-5 animate-spin"></lucide-icon>
+          {{ 'APP.PROCESSING' | translate }}
+        </span>
+      </button>
+    </div>
+  </form>
+</div>
+
+<app-toast 
+  *ngIf="showToast" 
+  [message]="toastMessage" 
+  [duration]="toastDuration" 
+  (animationDone)="showToast = false">
+</app-toast>

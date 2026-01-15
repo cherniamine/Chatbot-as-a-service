@@ -1,0 +1,234 @@
+{
+  "APP": {
+    "TITLE": "Chatbot Service",
+    "WELCOME": "Welcome",
+    "LOADING": "Loading...",
+    "NO_DATA": "No data available",
+    "ERROR": "Error",
+     "ERROR_REQUIRED": "is required",
+    "ERROR_MAX_LENGTH": "exceeds maximum length",
+    "PROCESSING": "Processing..."
+  },
+  "NAV": {
+    "DASHBOARD": "Dashboard",
+    "CHATBOTS": "Chatbots",
+     "FRENCH": "French",
+    "ENGLISH": "English",
+    "ARABIC": "Arabic",
+    "DOCUMENTS": "Documents",
+    "HISTORY": "History",
+    "SETTINGS": "Settings",
+    "LOGOUT": "Logout",
+    "DARK_MODE": "Dark mode",
+    "LANGUAGE": "Language",
+    "HELP": "Help",
+    "SEARCH": "Search"
+  },
+  "CHATBOT": {
+    "LIST_TITLE": "Chatbots List",
+     "SELECT_LABEL": "Select a chatbot",
+    "LIST": "List",
+    "CREATE_TITLE": "New Chatbot",
+    "NAME": "Name",
+    "NAME_PLACEHOLDER": "Ex: Medical Assistant",
+    "DESCRIPTION": "Description",
+    "DESCRIPTION_PLACEHOLDER": "Example: Customer Service Assistant",
+    "CREATE": "Create",
+    "DELETE": "Delete",
+    "DELETE_CONFIRM": "Are you sure you want to delete this chatbot?",
+    "RENAME": "Rename",
+    "CHAT": "Chat",
+    "SELECT": "Select a chatbot",
+    "NO_CHATBOTS": "No chatbots found",
+    "ID": "ID"
+  },
+  "DOCUMENT": {
+    "UPLOAD_TITLE": "Upload Document",
+    "UPLOAD_DESC": "Add your files for analysis",
+    "DRAG_DROP": "Drag and drop or",
+    "BROWSE": "browse",
+    "FORMATS": "Supported formats",
+    "UPLOAD_BTN": "Upload Document",
+    "PROCESSING": "Processing...",
+    "REMOVE": "Remove",
+    "LIST_TITLE": "Linked Documents",
+    "NO_DOCUMENTS": "No documents found",
+    "FILENAME": "Filename",
+     "LIST_BUTTON": "Documents List",
+    "DELETE_BUTTON": "Delete Document",
+    "DELETE_CONFIRM": "Are you sure you want to delete this document?",
+    "DELETE_ERROR": "Error deleting document",
+    "DELETE_SUCCESS": "Document deleted successfully",
+    "NO_DOCUMENTS_TITLE": "No documents available",
+    "NO_DOCUMENTS_DESC": "Start by uploading your first document",
+    "UPLOAD_BUTTON": "Upload Document",
+    "FILTER_BY_DATE": "Filter by date",
+    "CLEAR_FILTER": "Clear filter"
+  },
+  
+  "SIDEBAR": {
+    "HOME": "Home",
+    "CHATBOTS": "Chatbots",
+    "DOCUMENTS": "Documents",
+    "HISTORY": "History",
+    "SETTINGS": "Settings"
+  },
+ "NEW": "New",
+
+  "HISTORY": {
+    "TITLE": "Conversation History",
+    "SELECT_CHATBOT": "Select chatbot",
+    "START_DATE": "Start date",
+    "END_DATE": "End date",
+    "LOAD": "Load History",
+    "QUESTION": "Question",
+    "ANSWER": "Answer",
+    "SUMMARY": "Summary",
+    "SOURCES": "Sources",
+    "TIMESTAMP": "Date",
+    "NO_MESSAGES": "No messages found"
+  },
+   "DASHBOARD": {
+    "WELCOME_TITLE": "Welcome to your Dashboard",
+    "WELCOME_SUBTITLE": "Quick access to your chatbots, documents and users supervised",
+    "STATS": {
+      "TOTAL_CHATBOTS": "Total Chatbots",
+      "SUPERVISED_USERS": "Supervised Users",
+      "UPLOADED_DOCS": "Uploaded Documents",
+      "CONVERSATIONS": "Conversations",
+      "ACTIVE_BOTS": "Active",
+      "BOTS": "{{count}} active bot{{plural}}",
+      "LAST_UPLOAD": "Last upload",
+      "NO_UPLOADS": "No documents uploaded",
+      "DATE_NOT_AVAILABLE": "Date not available",
+      "ACTIVE": "active"
+    },
+    "ACTIONS": {
+      "CREATE_NEW": "Create new",
+      "MANAGE_USERS": "Users under your supervision",
+      "UPGRADE_NOW": "Upgrade now"
+    },
+    "PRO_TIP": {
+      "TITLE": "Pro Tip",
+      "DESCRIPTION": "Upgrade to premium for advanced analytics and unlimited documents"
+    },
+    "SHORTCUTS": {
+      "CHATBOTS": {
+        "TITLE": "Manage Chatbots",
+        "DESCRIPTION": "Create, edit or delete your chatbots"
+      },
+      "DOCUMENTS": {
+        "TITLE": "Manage Documents",
+        "DESCRIPTION": "Upload and link documents to your chatbots"
+      },
+      "USERS": {
+        "TITLE": "User Management",
+        "DESCRIPTION": "View and manage users you supervise"
+      },
+       "HELP": {
+      "TITLE": "Need Help?",
+      "DESCRIPTION": "Access our documentation and support resources"
+    },
+    "ACTIONS": {
+      "GET_HELP": "Get Help"
+    }
+    }
+  },
+  
+  "CHAT": {
+    "TITLE": "Chat",
+    "PLACEHOLDER": "Type your message...",
+    "SEND": "Send",
+    "RESET": "Reset",
+    "THINKING": "Thinking...",
+    "NO_CHATBOT": "Chatbot ID not specified",
+    "SOURCES": "Sources",
+    "VOICE_MESSAGE": "Voice recording",
+     "PREVIEW": "Preview",
+     "RECORDING": "Recording..."
+  },
+  "MODAL": {
+    "CONFIRM": "Confirm",
+    "CANCEL": "Cancel",
+    "RENAME_TITLE": "Rename Chatbot",
+    "RENAME_PLACEHOLDER": "New name",
+    "TITLE": "Dialog Title"
+  },
+
+   "COMMON": {
+    "CANCEL": "Cancel",
+    "DELETE": "Delete"
+  },
+  "HELP": {
+      "TITLE": "Help",
+      "SUBTITLE": "Find answers to your questions and learn how to use the platform",
+      "INTRO": {
+        "TITLE": "Introduction",
+        "DESCRIPTION": "Welcome to the help page. Here you can find information on how to use the application."
+      },
+      "CHATBOT": {
+        "TITLE": "Chatbot",
+        "CREATE": "Easily create a new chatbot.",
+        "UPLOAD_DOCS": "Upload your documents to train the chatbot.",
+        "INTERACT": "Interact with the chatbot to ask your questions."
+      },
+      "DOCS": {
+        "TITLE": "Documents",
+        "SUPPORTED": "Supported file types: PDF, Word, etc.",
+        "UPLOAD": "How to upload a new document.",
+        "DELETE": "Delete unwanted documents."
+      },
+      "HISTORY": {
+        "TITLE": "History",
+        "DESC": "You can view your interaction history with the chatbot here."
+      },
+      "CONTACT": {
+        "TITLE": "Support",
+        "DESC": "If you need additional help, please contact us at the following email:"
+      },
+      "HOME": {
+      "TITLE": "Home",
+      "DESCRIPTION": "Explore the dashboard with a quick overview of key statistics and essential shortcuts.",
+      "WELCOME_HEADER": "A personalized welcome message guides you to get started effectively.",
+      "STATS_OVERVIEW": "Real-time statistics on your chatbots, uploaded documents, conversations, and active bots.",
+      "SHORTCUTS_DESCRIPTION": "Interactive shortcuts to main sections: Chatbots, Documents, and History."
+    }
+    },
+    
+  "USER": {
+    "TITLE": "Supervised Users",
+    "LOADING": "Loading users...",
+    "NAME": "Name",
+    "EMAIL": "Email",
+    "ROLE": "Role",
+    "ACTIONS": "Actions",
+    "EDIT": "Edit",
+    "DELETE": "Delete",
+    "ADD": "Add User",
+    "NO_USERS": "No users found.",
+    "ADD_USER": "Add User",
+    "EDIT_USER": "Edit User",
+    "SAVE": "Save",
+    "UPDATE": "Update",
+    "CANCEL": "Cancel",
+    "CONFIRM_DELETE": "Confirm Deletion",
+    "DELETE_MESSAGE": "Are you sure you want to delete the user \"{{name}}\"?",
+    "FORM": {
+      "NAME": "Name",
+      "EMAIL": "Email",
+      "PASSWORD": "Password",
+      "ROLE": "Role",
+      "ROLES": {
+        "USER": "User",
+        "ADMIN": "Admin"
+      }
+    },
+    "EMPTY_STATE_DESCRIPTION": "Start by adding a new user to the system."
+  }
+
+
+  
+
+
+
+}

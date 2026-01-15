@@ -1,0 +1,147 @@
+<div class="p-6 space-y-8 max-w-7xl mx-auto">
+
+  <!-- En-tête de bienvenue amélioré -->
+  <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700/50 backdrop-blur-sm bg-opacity-90">
+    <div class="flex items-start gap-4">
+      <div class="p-3 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-lg shadow-md">
+        <lucide-icon name="layout-dashboard" class="w-6 h-6 text-white"></lucide-icon>
+      </div>
+      <div>
+        <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">
+          {{ 'DASHBOARD.WELCOME_TITLE' | translate }}
+        </h1>
+        <p class="text-gray-600 dark:text-gray-300 max-w-2xl">
+          {{ 'DASHBOARD.WELCOME_SUBTITLE' | translate }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Statistiques - Version améliorée -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+    <!-- Carte Création Chatbot -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-100 dark:border-gray-700/50 hover:shadow-md transition-all cursor-pointer group"
+         (click)="goToCreateChatbot()">
+      <div class="flex items-center gap-4">
+        <div class="p-3 bg-blue-100/50 dark:bg-blue-900/20 rounded-lg">
+          <lucide-icon name="plus-circle" class="w-6 h-6 text-blue-600 dark:text-blue-400"></lucide-icon>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">{{ 'DASHBOARD.STATS.TOTAL_CHATBOTS' | translate }}</p>
+          <p class="text-2xl font-semibold text-gray-800 dark:text-gray-100">{{ chatbots.length }}</p>
+        </div>
+      </div>
+      <div class="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700/50 flex justify-between items-center">
+        <span class="text-xs text-blue-600 dark:text-blue-400 font-medium">{{ 'DASHBOARD.ACTIONS.CREATE_NEW' | translate }}</span>
+        <lucide-icon name="arrow-right" class="w-4 h-4 text-blue-600 dark:text-blue-400 group-hover:translate-x-1 transition-transform"></lucide-icon>
+      </div>
+    </div>
+
+    <!-- Carte Documents -->
+   <div class="bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-100 dark:border-gray-700/50 hover:shadow-md transition-all">
+  <div class="flex items-center gap-4">
+    <div class="p-3 bg-green-100/50 dark:bg-green-900/20 rounded-lg">
+      <lucide-icon name="file-text" class="w-6 h-6 text-green-600 dark:text-green-400"></lucide-icon>
+    </div>
+    <div>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">{{ 'DASHBOARD.STATS.UPLOADED_DOCS' | translate }}</p>
+      <p class="text-2xl font-semibold text-gray-800 dark:text-gray-100">{{ uploadedDocuments.length }}</p>
+    </div>
+  </div>
+  <div class="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700/50">
+  <span class="text-xs text-gray-500 dark:text-gray-400">
+    {{ getUploadStatusText() }}
+  </span>
+</div>
+</div>
+
+    <!-- Carte Utilisateurs -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-100 dark:border-gray-700/50 hover:shadow-md transition-all cursor-pointer">
+      <div class="flex items-center gap-4">
+        <div class="p-3 bg-purple-100/50 dark:bg-purple-900/20 rounded-lg">
+          <lucide-icon name="users" class="w-6 h-6 text-purple-600 dark:text-purple-400"></lucide-icon>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">{{ 'DASHBOARD.STATS.SUPERVISED_USERS' | translate }}</p>
+          <p class="text-2xl font-semibold text-gray-800 dark:text-gray-100">{{ supervisedUserCount }}</p>
+        </div>
+      </div>
+      <div class="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700/50 flex justify-between items-center">
+        <span class="text-xs text-gray-500 dark:text-gray-400">{{ 'DASHBOARD.ACTIONS.MANAGE_USERS' | translate }}</span>
+       
+      </div>
+    </div>
+
+    <!-- Carte Bots Actifs -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-100 dark:border-gray-700/50 hover:shadow-md transition-all">
+      <div class="flex items-center gap-4">
+        <div class="p-3 bg-amber-100/50 dark:bg-amber-900/20 rounded-lg">
+          <lucide-icon name="activity" class="w-6 h-6 text-amber-600 dark:text-amber-400"></lucide-icon>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">{{ 'DASHBOARD.STATS.ACTIVE_BOTS' | translate }}</p>
+          <p class="text-2xl font-semibold text-gray-800 dark:text-gray-100">
+            {{ activeBotsCount }} <span class="text-sm font-normal text-gray-500 dark:text-gray-400">{{ 'DASHBOARD.STATS.ACTIVE' | translate }}</span>
+          </p>
+        </div>
+      </div>
+      <div class="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700/50">
+        <div class="h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+          <div class="h-full bg-amber-500" [style.width]="(activeBotsCount / totalBots) * 100 + '%'"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Raccourcis interactifs - Version premium -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+    <!-- Chatbots -->
+    <a routerLink="/dashboard/chatbots" class="group bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-100 dark:border-gray-700/50 hover:shadow-md transition-all hover:border-blue-200 dark:hover:border-blue-700/50">
+      <div class="flex items-start gap-4 mb-3">
+        <div class="p-3 bg-blue-100/50 dark:bg-blue-900/20 rounded-lg group-hover:bg-blue-100 dark:group-hover:bg-blue-900/30 transition-colors">
+          <lucide-icon name="bot" class="w-6 h-6 text-blue-600 dark:text-blue-400"></lucide-icon>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-1">{{ 'DASHBOARD.SHORTCUTS.CHATBOTS.TITLE' | translate }}</h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400">{{ 'DASHBOARD.SHORTCUTS.CHATBOTS.DESCRIPTION' | translate }}</p>
+        </div>
+      </div>
+      <div class="flex justify-end">
+        <lucide-icon name="chevron-right" class="w-5 h-5 text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"></lucide-icon>
+      </div>
+    </a>
+
+    <!-- Documents -->
+    <a routerLink="/dashboard/documents" class="group bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-100 dark:border-gray-700/50 hover:shadow-md transition-all hover:border-green-200 dark:hover:border-green-700/50">
+      <div class="flex items-start gap-4 mb-3">
+        <div class="p-3 bg-green-100/50 dark:bg-green-900/20 rounded-lg group-hover:bg-green-100 dark:group-hover:bg-green-900/30 transition-colors">
+          <lucide-icon name="folder-archive" class="w-6 h-6 text-green-600 dark:text-green-400"></lucide-icon>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-1">{{ 'DASHBOARD.SHORTCUTS.DOCUMENTS.TITLE' | translate }}</h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400">{{ 'DASHBOARD.SHORTCUTS.DOCUMENTS.DESCRIPTION' | translate }}</p>
+        </div>
+      </div>
+      <div class="flex justify-end">
+        <lucide-icon name="chevron-right" class="w-5 h-5 text-gray-400 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors"></lucide-icon>
+      </div>
+    </a>
+
+    <!-- Gestion Utilisateurs -->
+    <a routerLink="/dashboard/users" class="group bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-100 dark:border-gray-700/50 hover:shadow-md transition-all hover:border-purple-200 dark:hover:border-purple-700/50">
+      <div class="flex items-start gap-4 mb-3">
+        <div class="p-3 bg-purple-100/50 dark:bg-purple-900/20 rounded-lg group-hover:bg-purple-100 dark:group-hover:bg-purple-900/30 transition-colors">
+          <lucide-icon name="users" class="w-6 h-6 text-purple-600 dark:text-purple-400"></lucide-icon>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-1">{{ 'DASHBOARD.SHORTCUTS.USERS.TITLE' | translate }}</h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400">{{ 'DASHBOARD.SHORTCUTS.USERS.DESCRIPTION' | translate }}</p>
+        </div>
+      </div>
+      <div class="flex justify-end">
+        <lucide-icon name="chevron-right" class="w-5 h-5 text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors"></lucide-icon>
+      </div>
+    </a>
+  </div>
+
+ 

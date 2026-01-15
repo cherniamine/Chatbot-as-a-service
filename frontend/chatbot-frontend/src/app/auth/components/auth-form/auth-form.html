@@ -1,0 +1,10 @@
+<div class="bg-white p-6 rounded-xl shadow-md max-w-md w-full mx-auto">
+  <h2 class="text-2xl font-bold mb-4 text-center">{{ title }}</h2>
+  <form [formGroup]="form" class="space-y-4" (ngSubmit)="onSubmit()">
+    <input formControlName="email" type="email" placeholder="Email" class="w-full border px-4 py-2 rounded" />
+    <input formControlName="password" type="password" placeholder="Mot de passe" class="w-full border px-4 py-2 rounded" />
+    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white w-full py-2 rounded">
+      {{ buttonText }}
+    </button>
+  </form>
+</div>

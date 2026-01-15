@@ -1,0 +1,241 @@
+<div class="flex flex-col md:flex-row h-[87vh] max-h-[800px] text-gray-800 dark:text-gray-100 bg-gray-50 dark:bg-gray-900">
+  <!-- Colonne droite : Chatbot -->
+  <main class="flex-1 flex flex-col bg-white dark:bg-gray-800 shadow-xl rounded-tl-2xl rounded-tr-2xl md:rounded-tr-none md:rounded-bl-2xl overflow-hidden">
+
+    <!-- Header avec effet de verre -->
+    <header class="flex items-center gap-4 px-6 py-4 border-b border-gray-200/50 dark:border-gray-700/50 backdrop-blur-sm bg-white/80 dark:bg-gray-900/80">
+      <div class="relative">
+        <img
+          [src]="chatbot?.avatarUrl || 'assets/chatnex-icon-only.png'"
+          alt="Avatar"
+          class="w-12 h-12 rounded-full border-2 border-blue-500 shadow-lg"
+        />
+        <span class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-800"></span>
+      </div>
+      <div class="flex-1">
+        <h1 class="text-xl font-bold text-gray-900 dark:text-white">{{ chatbot?.name || 'SmartBot AI' }}</h1>
+        <p class="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1">
+          <span class="inline-flex w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+          {{ 'CHAT.THINKING' | translate }}
+        </p>
+      </div>
+      <button 
+        (click)="resetConversation()" 
+        class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700/50 transition transform hover:rotate-180 duration-300"
+        title="Réinitialiser la conversation"
+      >
+        <lucide-icon name="RefreshCw" class="w-5 h-5 text-gray-600 dark:text-gray-300"></lucide-icon>
+      </button>
+    </header>
+
+    <!-- Corps du chat avec dégradé subtil -->
+    <section 
+      #chatContainer 
+      class="flex-1 overflow-y-auto px-4 py-6 space-y-6 bg-gradient-to-b from-white/50 to-gray-50/30 dark:from-gray-800/50 dark:to-gray-900/30"
+    >
+      <div *ngIf="!chatbotId" class="mx-auto max-w-md p-4 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-300 rounded-xl shadow-sm text-center font-medium">
+        {{ 'CHAT.NO_CHATBOT' | translate }}
+      </div>
+
+     <ng-container *ngFor="let msg of messages; trackBy: trackByTimestamp">
+
+  <!-- ✅ Prévisualisation vocale -->
+  <div *ngIf="msg.question === '[ Prévisualisation vocale ]'" class="max-w-lg ml-auto">
+    <div class="bg-gradient-to-r from-blue-400 to-blue-500 text-white p-4 rounded-2xl shadow-lg flex items-start gap-3">
+      <div class="bg-white/20 p-2 rounded-full backdrop-blur-sm">
+        <lucide-icon name="headphones" class="w-4 h-4"></lucide-icon>
+      </div>
+      <div class="flex-1">
+        <p class="text-sm font-medium">{{ 'CHAT.PREVIEW' | translate }}</p>
+        <p class="text-xs text-blue-100 mb-2">{{ msg.timestamp | date:'shortTime' }}</p>
+        <audio 
+          [src]="msg.audioUrl" 
+          controls 
+          class="w-full rounded-lg bg-white/10 backdrop-blur-sm [&::-webkit-media-controls-panel]:bg-gray-900/50"
+        ></audio>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🎙️ Message vocal envoyé -->
+  <div *ngIf="msg.question === '[ Enregistrement vocal ]'" class="max-w-lg ml-auto">
+    <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4 rounded-2xl shadow-lg flex items-start gap-3">
+      <div class="bg-white/20 p-2 rounded-full backdrop-blur-sm">
+        <lucide-icon name="mic" class="w-4 h-4"></lucide-icon>
+      </div>
+      <div class="flex-1">
+        <p class="text-sm font-medium">Enregistrement vocal</p>
+        <p class="text-xs text-blue-100 mb-2">{{ msg.timestamp | date:'shortTime' }}</p>
+        <audio 
+          *ngIf="msg.audioUrl"
+          [src]="'http://localhost:8000' + msg.audioUrl" 
+          controls
+          class="w-full rounded-lg bg-white/10 backdrop-blur-sm [&::-webkit-media-controls-panel]:bg-gray-900/50"
+        ></audio>
+      </div>
+    </div>
+  </div>
+
+  <!-- ✍️ Message utilisateur écrit -->
+  <div *ngIf="msg.question !== '[ Enregistrement vocal ]' && msg.question !== '[ Prévisualisation vocale ]'" class="max-w-lg ml-auto">
+    <div class="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-4 rounded-2xl shadow-lg">
+      {{ msg.question }}
+      <div class="text-xs text-blue-200 mt-1">{{ msg.timestamp | date:'shortTime' }}</div>
+    </div>
+  </div>
+
+  <!-- 🤖 Réponse du bot -->
+  <div class="max-w-lg">
+    <div class="bg-gray-100 dark:bg-gray-700/80 p-4 rounded-2xl shadow-lg backdrop-blur-sm">
+      <div class="flex items-start gap-3">
+        <div class="bg-gray-200 dark:bg-gray-600 p-2 rounded-full">
+          <lucide-icon name="bot" class="w-4 h-4 text-gray-700 dark:text-gray-300"></lucide-icon>
+        </div>
+        <div class="flex-1">
+          <div class="text-gray-800 dark:text-gray-100 whitespace-pre-wrap">{{ msg.answer }}</div>
+
+          <!-- 🔊 Bouton réécoute -->
+          <div *ngIf="msg.audioUrl" class="mt-3">
+            <button
+              (click)="playAudio(msg.audioUrl)"
+              class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-gray-200/70 dark:bg-gray-600/70 hover:bg-gray-300/70 dark:hover:bg-gray-500/70 transition backdrop-blur-sm"
+            >
+              <lucide-icon name="volume-2" class="w-4 h-4"></lucide-icon>
+              {{ 'CHAT.REPLAY' | translate }}
+            </button>
+          </div>
+
+          <!-- 🔗 Sources -->
+          <div *ngIf="msg.sources.length > 0" class="mt-3 pt-2 border-t border-gray-200/50 dark:border-gray-600/50">
+            <div class="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400">
+              <lucide-icon name="link-2" class="w-3 h-3 mt-0.5 flex-shrink-0"></lucide-icon>
+              <div>
+                <span class="font-medium">{{ 'CHAT.SOURCES' | translate }}:</span>
+                {{ msg.sources.join(', ') }}
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</ng-container>
+
+
+      <!-- Indicateur de chargement animé -->
+      <div *ngIf="isLoading" class="max-w-lg">
+        <div class="bg-gray-100 dark:bg-gray-700/80 p-4 rounded-2xl shadow-lg backdrop-blur-sm">
+          <div class="flex items-center gap-3">
+            <div class="animate-spin">
+              <lucide-icon name="loader-2" class="w-5 h-5 text-gray-400"></lucide-icon>
+            </div>
+            <div class="text-sm text-gray-600 dark:text-gray-300">
+              {{ 'CHAT.THINKING' | translate }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Zone de saisie avec effet de verre -->
+    <footer class="border-t border-gray-200/50 dark:border-gray-700/50 p-4 backdrop-blur-sm bg-white/80 dark:bg-gray-900/80">
+
+      <!-- Indicateur vocal avec animation pulse -->
+      <div *ngIf="isRecording" class="mb-3">
+        <div class="flex items-center gap-2 px-3 py-2 bg-red-50 dark:bg-red-900/20 rounded-lg">
+          <div class="relative">
+            <div class="w-4 h-4 bg-red-500 rounded-full animate-ping absolute"></div>
+            <lucide-icon name="mic" class="w-4 h-4 text-red-600 dark:text-red-400 relative"></lucide-icon>
+          </div>
+          <span class="text-sm font-medium text-red-600 dark:text-red-400">{{ 'CHAT.RECORDING' | translate }}</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <!-- Champ de saisie avec focus state amélioré -->
+        <input
+          [(ngModel)]="userMessage"
+          placeholder="{{'CHAT.PLACEHOLDER' | translate}}"
+          class="flex-1 px-4 py-3 rounded-xl border border-gray-300/70 dark:border-gray-600/50 bg-white/70 dark:bg-gray-800/70 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition shadow-sm"
+          (keyup.enter)="sendMessage()"
+          [disabled]="isRecording || isLoading"
+        />
+
+        <!-- Boutons d'actions avec tooltips invisibles -->
+        <div class="flex items-center gap-1">
+          <!-- Enregistrement -->
+          <button
+            *ngIf="!isRecording && !isRecorded"
+            (click)="startRecording()"
+            class="p-2.5 rounded-xl bg-gradient-to-br from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white transition transform hover:scale-105 shadow-md"
+            [title]="'CHAT.RECORD' | translate"
+          >
+            <lucide-icon name="mic" class="w-5 h-5"></lucide-icon>
+          </button>
+
+          <!-- Contrôles enregistrement -->
+          <ng-container *ngIf="isRecording || isRecorded">
+            <!-- Stop -->
+            <button
+              *ngIf="isRecording"
+              (click)="stopRecording()"
+              class="p-2.5 rounded-xl bg-gradient-to-br from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white transition transform hover:scale-105 shadow-md"
+              title="Stop"
+            >
+              <lucide-icon name="square" class="w-5 h-5"></lucide-icon>
+            </button>
+
+            <!-- Envoyer -->
+            <button
+              *ngIf="isRecorded"
+              (click)="sendRecording()"
+              class="p-2.5 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white transition transform hover:scale-105 shadow-md"
+              title="Envoyer"
+            >
+              <lucide-icon name="send" class="w-5 h-5"></lucide-icon>
+            </button>
+
+            <!-- Réinitialiser -->
+            <button
+              *ngIf="isRecorded"
+              (click)="resetRecording()"
+              class="p-2.5 rounded-xl bg-gradient-to-br from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white transition transform hover:scale-105 shadow-md"
+              title="Réinitialiser"
+            >
+              <lucide-icon name="rotate-ccw" class="w-5 h-5"></lucide-icon>
+            </button>
+          </ng-container>
+
+          <!-- Envoyer message -->
+          <button
+            *ngIf="!isRecorded"
+            (click)="sendMessage()"
+            [disabled]="!userMessage.trim() || !chatbotId"
+            class="p-2.5 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white transition transform hover:scale-105 shadow-md disabled:opacity-50 disabled:transform-none"
+          >
+            <lucide-icon name="send" class="w-5 h-5"></lucide-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- Minuterie et barre de progression -->
+      <div *ngIf="isRecording" class="mt-3">
+        <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
+          <span>{{ elapsed }} sec</span>
+          <span>{{ duration }} sec max</span>
+        </div>
+        <div class="w-full h-1.5 bg-gray-300/50 dark:bg-gray-600/50 rounded-full overflow-hidden">
+          <div
+            class="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full"
+            [style.width.%]="(elapsed / duration) * 100"
+          ></div>
+        </div>
+      </div>
+
+      <!-- Prévisualisation audio stylisée -->
+      
+    </footer>
+  </main>
+</div>

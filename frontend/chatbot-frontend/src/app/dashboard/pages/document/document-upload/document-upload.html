@@ -1,0 +1,117 @@
+
+
+
+
+<div class="max-w-md w-full mx-auto p-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg transition-all space-y-8 relative">
+
+  <!-- En-tête avec icône animée -->
+  <div class="flex items-center gap-3">
+    <div class="p-2 rounded-lg bg-blue-50 dark:bg-blue-900/30">
+      <svg class="w-6 h-6 text-blue-600 dark:text-blue-400 animate-pulse" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m6.75 12l-3-3m0 0l-3 3m3-3v6m-1.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+      </svg>
+    </div>
+    <div>
+      <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ 'DOCUMENT.UPLOAD_TITLE' | translate }}</h2>
+      <p class="text-sm text-gray-500 dark:text-gray-400">{{ 'DOCUMENT.UPLOAD_DESC' | translate }}</p>
+    </div>
+  </div>
+
+  <!-- Zone de dépôt améliorée -->
+  <div 
+    class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-6 text-center transition-colors hover:border-blue-400 dark:hover:border-blue-500"
+    (drop)="handleDrop($event)"
+    (dragover)="handleDragOver($event)"
+    (dragleave)="handleDragLeave($event)"
+    [class.border-blue-500]="isDragging"
+  >
+    <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+    </svg>
+    <div class="mt-4 flex justify-center text-sm text-gray-600 dark:text-gray-300">
+      <label for="file-upload" class="relative cursor-pointer rounded-md font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 focus-within:outline-none">
+         <span>{{ 'DOCUMENT.DRAG_DROP' | translate }}</span>
+        <input 
+          id="file-upload" 
+          name="file-upload" 
+          type="file" 
+          class="sr-only"
+          accept=".pdf,.doc,.docx,.txt,.md,.csv,.xlsx,.pptx,.jpg,.jpeg,.png,.bmp,.tiff,.webp"
+          (change)="onFileSelected($event)"
+        />
+         <span class="ml-1 underline">{{ 'DOCUMENT.BROWSE' | translate }}</span>
+      </label>
+    </div>
+    <p class="text-xs text-gray-500 dark:text-gray-400 mt-2"> PDF, DOCX, TXT, CSV, MD, JPG, PNG, etc. (max. 10MB)</p>
+  </div>
+
+  <!-- Fichier sélectionné avec icône de type -->
+  <div *ngIf="selectedFile" class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+    <div class="flex items-center gap-3">
+      <div class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700">
+        <svg class="w-5 h-5 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+      </div>
+      <div class="truncate max-w-xs">
+        <p class="text-sm font-medium text-gray-700 dark:text-gray-200 truncate">{{ selectedFile.name }}</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400">{{ selectedFile.size | fileSize }}</p>
+      </div>
+    </div>
+    <button 
+      (click)="removeFile()"
+      class="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
+    >
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Bouton d'upload avec état de chargement -->
+  <button
+    (click)="onUpload()"
+    [disabled]="!selectedFile || isLoading"
+    class="w-full flex items-center justify-center gap-3 px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-medium transition-all disabled:opacity-70 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
+  >
+    <span *ngIf="!isLoading">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+      </svg>
+    </span>
+    <span *ngIf="isLoading" class="animate-spin">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+      </svg>
+    </span>
+     {{ isLoading ? ('DOCUMENT.PROCESSING' | translate) : ('DOCUMENT.UPLOAD_BTN' | translate) }}
+  </button>
+
+  <!-- Liste des formats supportés -->
+  <div class="mt-6">
+    <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wider">{{ 'DOCUMENT.FORMATS' | translate }} :</p>
+    <div class="grid grid-cols-3 gap-2">
+      <div *ngFor="let format of supportedFormats" class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+        <span class="text-blue-500 dark:text-blue-400 font-mono">.{{format}}</span>
+      </div>
+    </div>
+  </div>
+  <!-- Bouton Liste Documents en haut à droite -->
+  <!--<a
+    routerLink="/dashboard/documents"
+    class="absolute -top-4 right-4 inline-flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white text-sm font-semibold rounded-lg shadow-md transition-shadow"
+    aria-label="Liste des documents"
+  >
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+  
+  </a> -->
+</div>
+
+<app-toast 
+  *ngIf="showToast" 
+  [message]="toastMessage" 
+  [duration]="toastDuration" 
+  (animationDone)="showToast = false">
+</app-toast>

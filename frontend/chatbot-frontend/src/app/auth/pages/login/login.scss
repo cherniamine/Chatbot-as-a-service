@@ -1,0 +1,39 @@
+@keyframes robot-lottie-loop {
+  0% {
+    left: -200px;
+  }
+  100% {
+    left: 110%;
+  }
+}
+
+.animate-robot-lottie {
+  animation: robot-lottie-loop 20s linear infinite;
+}
+
+@keyframes bot-left-fly {
+  0% { left: -200px; transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { left: 110%; transform: translateY(0); }
+}
+
+@keyframes bot-right-fly {
+  0% { right: -200px; transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { right: 110%; transform: translateY(0); }
+}
+
+.animate-left-bot,
+.animate-right-bot {
+  animation: none; /* désactive les animations */
+  transform: scale(1.8); /* agrandit les robots */
+}
+
+.fixed-bot {
+  width: 200px; /* ou plus si besoin */
+  height: auto;
+  
+  top: -10px; /* remonte l'élément de 60px */
+  margin-right: 25px;
+  margin-left: 100px;
+}
