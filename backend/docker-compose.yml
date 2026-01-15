@@ -1,0 +1,38 @@
+version: '3.9'
+
+services:
+  backend:
+    build: .
+    container_name: chatbot_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app/app
+      - ./indexes:/app/indexes
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:6
+    container_name: chatbot_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    restart: unless-stopped
+
+  ollama:
+    image: ollama/ollama
+    container_name: chatbot_ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+
+volumes:
+  mongodb_data:
+  ollama_data:
