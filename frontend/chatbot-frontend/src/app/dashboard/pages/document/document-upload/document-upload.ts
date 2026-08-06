@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { DocumentService } from '../../../../core/services/document.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,6 +13,7 @@ import { Toast } from '../../../../shared/components/toast/toast';
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     LucideAngularModule,
     FileSizePipe,
     TranslateModule,
@@ -31,6 +33,13 @@ export class DocumentUpload {
   toastDuration: any;
   type: any;
 
+  // --- OCR preview (images uniquement) ---
+  private readonly imageExtensions = ['jpg', 'jpeg', 'png', 'bmp', 'tiff', 'tif', 'webp'];
+  isImageFile = false;
+  isOcrLoading = false;
+  ocrText: string | null = null;
+  ocrError: string | null = null;
+
   constructor(
     private documentService: DocumentService,
     private route: ActivatedRoute,
@@ -45,6 +54,7 @@ export class DocumentUpload {
     if (input.files && input.files.length > 0) {
       this.selectedFile = input.files[0];
       console.log('Fichier sélectionné:', this.selectedFile);
+      this.handleSelectedFile(this.selectedFile);
     }
   }
 
@@ -59,10 +69,35 @@ export class DocumentUpload {
       if (this.isFileFormatSupported(file)) {
         this.selectedFile = file;
         console.log('Format supporté:', file.name);
+        this.handleSelectedFile(file);
       } else {
         console.warn('Format non supporté:', file.name);
         alert('Format de fichier non supporté');
       }
+    }
+  }
+
+  /** Détecte si le fichier est une image et lance la preview OCR le cas échéant */
+  private handleSelectedFile(file: File): void {
+    const extension = file.name.split('.').pop()?.toLowerCase() || '';
+    this.isImageFile = this.imageExtensions.includes(extension);
+    this.ocrText = null;
+    this.ocrError = null;
+
+    if (this.isImageFile) {
+      this.isOcrLoading = true;
+      this.documentService.ocrPreview(file).subscribe({
+        next: (res) => {
+          this.isOcrLoading = false;
+          this.ocrText = res.text?.trim() || '';
+        },
+        error: (err) => {
+          this.isOcrLoading = false;
+          this.ocrError =
+            err.error?.detail || err.message || "Erreur lors de l'extraction OCR";
+          console.error('Erreur OCR preview:', err);
+        },
+      });
     }
   }
 
@@ -83,6 +118,10 @@ export class DocumentUpload {
   removeFile(): void {
     console.log('Fichier supprimé:', this.selectedFile?.name);
     this.selectedFile = null;
+    this.isImageFile = false;
+    this.isOcrLoading = false;
+    this.ocrText = null;
+    this.ocrError = null;
   }
 
   onUpload(): void {
@@ -96,7 +135,12 @@ export class DocumentUpload {
       this.isLoading = true;
       console.log("Début de l'upload pour:", this.selectedFile.name);
 
-      this.documentService.upload(this.chatbotId, this.selectedFile).subscribe({
+      // Si c'est une image et que la preview OCR a produit un texte
+      // (éventuellement corrigé par l'utilisateur), on l'envoie tel quel
+      // pour éviter de relancer l'OCR et pour indexer la version corrigée.
+      const correctedText = this.isImageFile && this.ocrText !== null ? this.ocrText : undefined;
+
+      this.documentService.upload(this.chatbotId, this.selectedFile, correctedText).subscribe({
         next: () => {
           this.isLoading = false;
           console.log('Upload réussi:', this.selectedFile?.name);

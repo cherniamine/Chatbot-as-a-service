@@ -19,14 +19,28 @@ export class DocumentService {
     });
   }
 
-  upload(chatbotId: string, file: File): Observable<AppDocument> {
+  upload(chatbotId: string, file: File, correctedText?: string): Observable<AppDocument> {
     const formData = new FormData();
     formData.append('chatbot_id', chatbotId);
     formData.append('file', file);
+    if (correctedText !== undefined && correctedText !== null) {
+      formData.append('corrected_text', correctedText);
+    }
 
     return this.http.post<AppDocument>(`${this.apiUrl}/document/upload`, formData, {
       headers: this.getHeaders()
     });
+  }
+
+  ocrPreview(file: File): Observable<{ filename: string; text: string }> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return this.http.post<{ filename: string; text: string }>(
+      `${this.apiUrl}/document/ocr-preview`,
+      formData,
+      { headers: this.getHeaders() }
+    );
   }
 
   list(chatbotId: string): Observable<AppDocument[]> {

@@ -150,6 +150,15 @@ def extract_text_from_pptx_bytes(pptx_bytes: bytes) -> str:
     return text.strip()
 
 
+# ----------- IMAGES : extensions supportées -----------
+IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".bmp", ".tiff", ".tif", ".webp"]
+
+
+def is_image_filename(filename: str) -> bool:
+    """Indique si un nom de fichier correspond à une image supportée par l'OCR"""
+    return os.path.splitext(filename)[1].lower() in IMAGE_EXTENSIONS
+
+
 # ----------- IMAGES (Azure Vision OCR) -----------
 def extract_text_from_image_bytes_azure(image_bytes: bytes) -> str:
     """Extrait le texte d'une image via Azure Vision OCR"""
@@ -212,7 +221,7 @@ async def extract_text(file) -> str:
         elif ext == ".pptx":
             return extract_text_from_pptx_bytes(contents)
 
-        elif ext in [".jpg", ".jpeg", ".png", ".bmp", ".tiff", ".tif"]:
+        elif ext in IMAGE_EXTENSIONS:
             return extract_text_from_image_bytes_azure(contents)
 
         else:
@@ -225,7 +234,7 @@ async def extract_text(file) -> str:
             return extract_text_from_pdf(file)
         elif ext in [".txt", ".md"]:
             return extract_text_from_txt(file)
-        elif ext in [".jpg", ".jpeg", ".png", ".bmp", ".tiff", ".tif"]:
+        elif ext in IMAGE_EXTENSIONS:
             with open(file, "rb") as f:
                 return extract_text_from_image_bytes_azure(f.read())
         else:
