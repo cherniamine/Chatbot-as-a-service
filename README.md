@@ -7,7 +7,7 @@
 [![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?logo=docker)](https://www.docker.com)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-> Plateforme permettant à chaque utilisateur de créer son propre **chatbot intelligent** connecté à ses documents (PDF/TXT), grâce à une architecture **RAG (Retrieval-Augmented Generation)**. Support du texte et de la voix (reconnaissance et synthèse vocale).
+> Plateforme permettant à chaque utilisateur de créer son propre **chatbot intelligent** connecté à ses documents (PDF, DOCX, TXT, CSV, XLSX, PPTX, images...), grâce à une architecture **RAG (Retrieval-Augmented Generation)**. Support du texte, de la voix (reconnaissance et synthèse vocale) et de l'image (OCR).
 
 ---
 
@@ -15,8 +15,10 @@
 
 - [Fonctionnalités](#-fonctionnalités)
 - [Architecture](#-architecture)
+- [OCR Preview](#-ocr-preview--aperçu-et-correction-avant-upload)
 - [Stack technique](#-stack-technique)
 - [Sécurité & configuration](#-sécurité--configuration)
+- [Endpoints API — Documents](#-endpoints-api--documents)
 - [Installation & Lancement](#-installation--lancement)
 - [Structure du projet](#-structure-du-projet)
 - [Auteur](#-auteur)
@@ -33,12 +35,17 @@
 **Chatbots personnalisés**
 - Création, modification, suppression de chatbots par utilisateur
 - Chaque chatbot est isolé : son propre index vectoriel, son propre historique
-- Upload de documents (PDF/TXT) comme base de connaissance
+- Upload de documents (PDF, DOCX, TXT, CSV, XLSX, PPTX, images) comme base de connaissance
 
 **RAG (Retrieval-Augmented Generation)**
 - Indexation vectorielle des documents via **FAISS**
 - Embeddings via **Sentence-Transformers**
 - Génération de réponses contextualisées via **Ollama** (LLM local)
+
+**OCR Preview (images)**
+- Avant l'upload définitif, toute image sélectionnée passe par un aperçu OCR
+- L'utilisateur voit et peut **corriger** le texte extrait avant qu'il soit indexé
+- Formats supportés : JPG, JPEG, PNG, BMP, TIFF/TIF, WEBP
 
 **Interaction vocale**
 - Reconnaissance vocale et synthèse vocale (Azure Cognitive Services, gTTS)
@@ -101,6 +108,79 @@ Chaque utilisateur dispose de son propre espace : ses chatbots, ses documents in
 
 ---
 
+## 🔍 OCR Preview — aperçu et correction avant upload
+
+Lorsqu'un utilisateur sélectionne une **image** (JPG, JPEG, PNG, BMP, TIFF/TIF, WEBP) comme document à ajouter à un chatbot, le frontend déclenche automatiquement un appel à l'endpoint d'aperçu OCR **avant** l'upload définitif. Cela permet de vérifier — et au besoin de corriger — le texte détecté avant qu'il ne soit découpé en chunks et indexé dans FAISS.
+
+### Fonctionnement
+
+```mermaid
+sequenceDiagram
+    participant U as Utilisateur
+    participant FE as Frontend Angular
+    participant API as Backend FastAPI
+    participant AZ as Azure Vision OCR
+
+    U->>FE: Sélectionne une image
+    FE->>API: POST /document/ocr-preview (file)
+    API->>AZ: Analyse OCR (READ)
+    AZ-->>API: Texte extrait
+    API-->>FE: { filename, text }
+    FE-->>U: Affiche le texte dans une zone éditable
+    U->>FE: Corrige le texte si nécessaire
+    U->>FE: Clique sur "Uploader"
+    FE->>API: POST /document/upload (file, chatbot_id, corrected_text)
+    API->>API: Utilise corrected_text (pas de second appel OCR)
+    API-->>FE: Document sauvegardé + index reconstruit
+```
+
+Points clés :
+- L'appel `/document/ocr-preview` **n'écrit rien en base** — c'est un aperçu pur.
+- Si l'utilisateur corrige le texte, la version corrigée est envoyée dans le champ `corrected_text` lors de l'upload final, ce qui **évite un second appel OCR** redondant et garantit que c'est bien le texte validé par l'utilisateur qui est indexé.
+- Si `corrected_text` n'est pas fourni (ou que le fichier n'est pas une image), le comportement historique est conservé : extraction automatique via `extract_text()`.
+
+### Formats d'image supportés
+
+| Extension | Supporté |
+|---|---|
+| `.jpg` / `.jpeg` | ✅ |
+| `.png` | ✅ |
+| `.bmp` | ✅ |
+| `.tiff` / `.tif` | ✅ |
+| `.webp` | ✅ |
+
+### Variables d'environnement requises
+
+L'OCR repose sur **Azure AI Vision** (fonctionnalité *Read*). Dans `backend/.env` :
+
+```bash
+AZURE_VISION_ENDPOINT=https://<votre-ressource>.cognitiveservices.azure.com/
+AZURE_VISION_KEY=<votre-clé-azure-vision>
+```
+
+Sans ces variables, les appels OCR (preview et upload direct d'image) échouent avec une erreur explicite invitant à configurer `.env`.
+
+### Exemple d'utilisation (API)
+
+```bash
+# 1. Aperçu OCR (sans sauvegarde)
+curl -X POST http://localhost:8000/document/ocr-preview \
+  -H "Authorization: Bearer <votre_token_jwt>" \
+  -F "file=@facture.png"
+
+# Réponse :
+# { "filename": "facture.png", "text": "Facture n°1234\nTotal: 150.00 TND\n..." }
+
+# 2. Upload définitif avec texte corrigé
+curl -X POST http://localhost:8000/document/upload \
+  -H "Authorization: Bearer <votre_token_jwt>" \
+  -F "chatbot_id=64f1a2b3c4d5e6f7a8b9c0d1" \
+  -F "file=@facture.png" \
+  -F "corrected_text=Facture n°1234\nTotal: 150,00 TND\n..."
+```
+
+---
+
 ## 🛠️ Stack technique
 
 **Backend**
@@ -131,6 +211,18 @@ cp backend/.env.example backend/.env
 > ⚠️ **Points à durcir avant un déploiement en production** :
 > - Remplacer les valeurs par défaut de `SECRET_KEY` / `SESSION_SECRET_KEY` (actuellement des valeurs de repli codées en dur dans `config.py`/`main.py`) par des secrets forts générés aléatoirement, exigés en variable d'environnement.
 > - Restreindre `CORSMiddleware(allow_origins=["*"])` aux domaines réels du frontend en production.
+> - `AZURE_VISION_ENDPOINT` / `AZURE_VISION_KEY` sont requis pour toute fonctionnalité OCR (upload d'image et OCR Preview) — voir la section [OCR Preview](#-ocr-preview--aperçu-et-correction-avant-upload).
+
+---
+
+## 📡 Endpoints API — Documents
+
+| Méthode | Endpoint | Description |
+|---|---|---|
+| `POST` | `/document/ocr-preview` | Extrait le texte d'une image via OCR, sans sauvegarde (aperçu) |
+| `POST` | `/document/upload` | Upload d'un document (accepte `corrected_text` optionnel pour les images) |
+| `GET` | `/document/list` | Liste les documents d'un chatbot |
+| `DELETE` | `/document/{document_id}` | Supprime un document |
 
 ---
 
@@ -168,17 +260,24 @@ ng serve
 Chatbot-as-a-service/
 ├── backend/
 │   ├── app/
-│   │   ├── api/            # auth.py · chatbot.py · document.py
+│   │   ├── api/            # auth.py · chatbot.py · document.py (upload, list, delete, ocr-preview)
 │   │   ├── core/           # config.py · jwt.py · oauth.py · database.py
 │   │   ├── models/         # user.py · chatbot.py · document.py · ask.py
 │   │   ├── services/       # rag_service, chatbot_service, history_service
+│   │   ├── utils/          # file_utils.py (extraction texte + OCR), auth_utils.py, avatar_util.py
 │   │   └── main.py
 │   ├── scripts/
 │   ├── .env.example
 │   └── Dockerfile
 └── frontend/
     └── chatbot-frontend/   # Application Angular
-        └── src/app/
+        └── src/
+            ├── app/
+            │   ├── core/services/           # document.service.ts (upload, list, delete, ocrPreview)
+            │   └── dashboard/pages/document/
+            │       ├── document-upload/     # document-upload.ts/.html (sélection + preview OCR)
+            │       └── document-list/
+            └── assets/i18n/                 # fr.json · en.json · ar.json
 ```
 
 
